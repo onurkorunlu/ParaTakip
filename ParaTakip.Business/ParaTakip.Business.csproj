@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ParaTakip.Common\ParaTakip.Common.csproj" />
+    <ProjectReference Include="..\ParaTakip.Core\ParaTakip.Core.csproj" />
+    <ProjectReference Include="..\ParaTakip.DataAccess\ParaTakip.DataAccess.csproj" />
+    <ProjectReference Include="..\ParaTakip.Entities\ParaTakip.Entities.csproj" />
+    <ProjectReference Include="..\ParaTakip.Model\ParaTakip.Model.csproj" />
+    <ProjectReference Include="..\ParaTakip.PyhtonIntegrator\ParaTakip.PyhtonIntegrator.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Interfaces\" />
+    <Folder Include="Services\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="log4net" Version="2.0.17" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="8.0.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.1.2" />
+  </ItemGroup>
+
+</Project>

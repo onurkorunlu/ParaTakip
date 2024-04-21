@@ -1,0 +1,209 @@
+{
+  "AED": {
+    "ALPHA_CURRENCY_CODE": "AED",
+    "CURRENCY_CODE": "784",
+    "NAME": "Birleşik Arap Emirlikleri dirhemi"
+  },
+  "AUD": {
+    "ALPHA_CURRENCY_CODE": "AUD",
+    "CURRENCY_CODE": "36",
+    "NAME": "Avustralya doları"
+  },
+  "AZN": {
+    "ALPHA_CURRENCY_CODE": "AZN",
+    "CURRENCY_CODE": "944",
+    "NAME": "Azerbaycan manatı"
+  },
+  "BGN": {
+    "ALPHA_CURRENCY_CODE": "BGN",
+    "CURRENCY_CODE": "975",
+    "NAME": "Bulgar levası"
+  },
+  "CAD": {
+    "ALPHA_CURRENCY_CODE": "CAD",
+    "CURRENCY_CODE": "124",
+    "NAME": "Kanada doları"
+
+  },
+  "CHF": {
+    "ALPHA_CURRENCY_CODE": "CHF",
+    "CURRENCY_CODE": "756",
+    "NAME": "İsviçre frangı"
+  },
+  "CNY": {
+    "ALPHA_CURRENCY_CODE": "CNY",
+    "CURRENCY_CODE": "156",
+    "NAME": "Yuan Renminbisi"
+  },
+  "DKK": {
+    "ALPHA_CURRENCY_CODE": "DKK",
+    "CURRENCY_CODE": "208",
+    "NAME": "Danimarka kronu"
+  },
+  "EUR": {
+    "ALPHA_CURRENCY_CODE": "EUR",
+    "CURRENCY_CODE": "978",
+    "NAME": "Euro"
+  },
+  "GBP": {
+    "ALPHA_CURRENCY_CODE": "GBP",
+    "CURRENCY_CODE": "826",
+    "NAME": "İngiliz sterlini"
+
+  },
+  "IRR": {
+    "ALPHA_CURRENCY_CODE": "IRR",
+    "CURRENCY_CODE": "364",
+    "NAME": "İran riyali"
+  },
+  "JPY": {
+    "ALPHA_CURRENCY_CODE": "JPY",
+    "CURRENCY_CODE": "392",
+    "NAME": "Japon yeni"
+  },
+  "KRW": {
+    "ALPHA_CURRENCY_CODE": "KRW",
+    "CURRENCY_CODE": "410",
+    "NAME": "Güney Kore wonu"
+  },
+  "KWD": {
+    "ALPHA_CURRENCY_CODE": "KWD",
+    "CURRENCY_CODE": "414",
+    "NAME": "Kuveyt dinarı"
+  },
+  "NOK": {
+    "ALPHA_CURRENCY_CODE": "NOK",
+    "CURRENCY_CODE": "578",
+    "NAME": "Norveç kronu"
+  },
+  "PKR": {
+    "ALPHA_CURRENCY_CODE": "PKR",
+    "CURRENCY_CODE": "586",
+    "NAME": "Pakistan rupisi"
+  },
+  "QAR": {
+    "ALPHA_CURRENCY_CODE": "QAR",
+    "CURRENCY_CODE": "634",
+    "NAME": "Katar riyali"
+  },
+  "RON": {
+    "ALPHA_CURRENCY_CODE": "RON",
+    "CURRENCY_CODE": "946",
+    "NAME": "Rumen leyi"
+  },
+  "RUB": {
+    "ALPHA_CURRENCY_CODE": "RUB",
+    "CURRENCY_CODE": "643",
+    "NAME": "Rus rublesi"
+  },
+  "SAR": {
+    "ALPHA_CURRENCY_CODE": "SAR",
+    "CURRENCY_CODE": "682",
+    "NAME": "Suudi Arabistan riyali"
+  },
+  "SEK": {
+    "ALPHA_CURRENCY_CODE": "SEK",
+    "CURRENCY_CODE": "752",
+    "NAME": "İsveç kronu"
+  },
+  "USD": {
+    "ALPHA_CURRENCY_CODE": "USD",
+    "CURRENCY_CODE": "840",
+    "NAME": "Amerikan doları"
+  },
+  "XDR": {
+    "ALPHA_CURRENCY_CODE": "XDR",
+    "CURRENCY_CODE": "960",
+    "NAME": "Özel çekme hakları"
+  },
+  "ONS": {
+    "ALPHA_CURRENCY_CODE": "ONS",
+    "CURRENCY_CODE": "",
+    "NAME": "ONS"
+  },
+  "GRA": {
+    "ALPHA_CURRENCY_CODE": "ONS",
+    "CURRENCY_CODE": "",
+    "NAME": "Gram Altın"
+  },
+  "CEY": {
+    "ALPHA_CURRENCY_CODE": "ONS",
+    "CURRENCY_CODE": "",
+    "NAME": "Çeyrek Altın"
+  },
+  "YAR": {
+    "ALPHA_CURRENCY_CODE": "YAR",
+    "CURRENCY_CODE": "",
+    "NAME": "Yarım Altın"
+  },
+  "TAM": {
+    "ALPHA_CURRENCY_CODE": "TAM",
+    "CURRENCY_CODE": "",
+    "NAME": "Tam Altın"
+  },
+  "CUM": {
+    "ALPHA_CURRENCY_CODE": "CUM",
+    "CURRENCY_CODE": "",
+    "NAME": "Cumhuriyet Altını"
+  },
+  "ATA": {
+    "ALPHA_CURRENCY_CODE": "ATA",
+    "CURRENCY_CODE": "",
+    "NAME": "Ata Altın"
+  },
+  "ODA": {
+    "ALPHA_CURRENCY_CODE": "ODA",
+    "CURRENCY_CODE": "",
+    "NAME": "14 Ayar Altın"
+  },
+  "OSA": {
+    "ALPHA_CURRENCY_CODE": "OSA",
+    "CURRENCY_CODE": "",
+    "NAME": "18 Ayar Altın"
+  },
+  "YIA": {
+    "ALPHA_CURRENCY_CODE": "YIA",
+    "CURRENCY_CODE": "",
+    "NAME": "22 Ayar Altın"
+  },
+  "IKI": {
+    "ALPHA_CURRENCY_CODE": "IKI",
+    "CURRENCY_CODE": "",
+    "NAME": "İki Buçuk Altın"
+  },
+  "BES": {
+    "ALPHA_CURRENCY_CODE": "BES",
+    "CURRENCY_CODE": "",
+    "NAME": "Beşli Altın"
+  },
+  "GRE": {
+    "ALPHA_CURRENCY_CODE": "GRE",
+    "CURRENCY_CODE": "",
+    "NAME": "Gremse Altın"
+  },
+  "RES": {
+    "ALPHA_CURRENCY_CODE": "RES",
+    "CURRENCY_CODE": "",
+    "NAME": "Reşat Altın"
+  },
+  "HAM": {
+    "ALPHA_CURRENCY_CODE": "HAM",
+    "CURRENCY_CODE": "",
+    "NAME": "Hamit Altın"
+  },
+  "GUM": {
+    "ALPHA_CURRENCY_CODE": "ATA",
+    "CURRENCY_CODE": "",
+    "NAME": "Gümüş"
+  },
+  "XAU": {
+    "ALPHA_CURRENCY_CODE": "XAU",
+    "CURRENCY_CODE": "",
+    "NAME": "Altın"
+  },
+  "XAS": {
+    "ALPHA_CURRENCY_CODE": "XAS",
+    "CURRENCY_CODE": "",
+    "NAME": "Saf Altın"
+  }
+}

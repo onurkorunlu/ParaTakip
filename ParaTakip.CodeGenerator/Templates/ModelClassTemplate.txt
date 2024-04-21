@@ -1,0 +1,9 @@
+﻿using ParaTakip.Entities.Enums;
+
+namespace ParaTakip.Model.@Folder
+{
+    public class @EntityName
+    {
+        public string Id { get; set; }
+    }
+}

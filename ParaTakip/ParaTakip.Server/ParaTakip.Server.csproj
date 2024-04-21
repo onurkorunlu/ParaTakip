@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <SpaRoot>..\paratakip.client</SpaRoot>
+    <SpaProxyLaunchCommand>npm start</SpaProxyLaunchCommand>
+    <SpaProxyServerUrl>https://localhost:4200</SpaProxyServerUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="log4net" Version="2.0.17" />
+    <PackageReference Include="Microsoft.AspNetCore.SpaProxy">
+      <Version>8.*-*</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="8.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\ParaTakip.Business\ParaTakip.Business.csproj" />
+    <ProjectReference Include="..\..\ParaTakip.Configuration\ParaTakip.Configuration.csproj" />
+    <ProjectReference Include="..\..\ParaTakip.Core\ParaTakip.Core.csproj" />
+    <ProjectReference Include="..\..\ParaTakip.Entities\ParaTakip.Entities.csproj" />
+    <ProjectReference Include="..\..\ParaTakip.Model\ParaTakip.Model.csproj" />
+    <ProjectReference Include="..\..\ParaTakip.PyhtonIntegrator\ParaTakip.PyhtonIntegrator.csproj" />
+    <ProjectReference Include="..\paratakip.client\paratakip.client.esproj">
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="python38.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="py\tefas.py">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

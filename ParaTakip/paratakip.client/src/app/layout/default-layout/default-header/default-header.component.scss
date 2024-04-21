@@ -1,0 +1,30 @@
+.goldbtn{
+    font-size: small;
+    margin: 0.25rem !important;
+    background-color: #FFD700;
+    color: #414141;
+    border: 1px solid #FFD700;
+    &:hover {
+        background-color: #ffd900be;
+        color: #414141;
+        border: 1px solid #ffd900be;
+    }
+}
+
+.curbtn{
+    font-size: small;
+    margin: 0.25rem !important;
+    background-color: #E91E63;
+    color: white;
+    border: 1px solid #E91E63;
+    &:hover {
+        background-color: #e91e62b6;
+        color: white;
+        border: 1px solid #e91e62b6;
+    }
+}
+
+.badge{
+    font-size: small;
+    padding: 10px;
+}

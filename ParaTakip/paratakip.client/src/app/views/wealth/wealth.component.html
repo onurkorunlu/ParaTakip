@@ -1,0 +1,309 @@
+<c-row ngPreserveWhitespaces>
+    <c-col xs="12" md="6">
+        <c-card class="mb-4">
+            <c-card-header>
+                <button cButton color="link" [cModalToggle]="addForeignExchangeFormModal.id">
+                    <svg cIcon class="me-2" name="cil-plus"></svg>
+                </button>
+                Döviz Ve Değerli Madenler
+                
+            </c-card-header>
+            <c-card-body>
+                <table cTable [responsive]="true" [striped]="true" *ngIf="ExchangeRateCache">
+                    <thead>
+                        <tr>
+                            <th *ngFor="let header of foreignExchangeTableRows">{{ header }}</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of wealth.values[WealthType.FOREIGN_EXCHANGE_AND_PRECIOUS_METALS]">
+                            <td>{{item.currency}}</td><!--Para Birimi-->
+                            <td>{{Intl.NumberFormat('tr-TR', {style:'currency', currency:localCurrency}).format(item.buying)}}</td><!--Alış Fiyatı-->
+                            <td>{{Intl.NumberFormat('tr-TR', {style:'currency', currency:item.currency}).format(item.amount)}}</td><!--Miktar-->
+                            <td>{{Intl.NumberFormat('tr-TR', {style:'currency', currency:item.currency}).format(item.buying * item.amount)}}</td><!--Maliyet-->
+                            <td>{{Intl.NumberFormat('tr-TR', {style:'currency', currency:localCurrency}).format(ExchangeRateCache[item.currency].buying)}}</td><!--Güncel Fiyat-->
+                            <td>{{Intl.NumberFormat('tr-TR', {style:'currency', currency:localCurrency}).format(item.amount * ExchangeRateCache[item.currency].buying)}}</td><!--Güncel Tutar-->
+                            <td>{{Intl.NumberFormat('tr-TR', {style:'currency', currency:localCurrency}).format(calculateProfit(item.buying, item.amount, ExchangeRateCache[item.currency].buying))}}</td><!--Kar&Zarar%-->
+                            <td>{{Intl.NumberFormat('tr-TR').format(calculateProfitRatio(item.buying, item.amount, ExchangeRateCache[item.currency].buying))}}%</td><!--Kar&Zarar%-->
+                            <td>
+                                <button cButton color="link" size="sm" style="color: red;">
+                                    <svg cIcon class="me-2" name="cil-trash"></svg>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+           
+            </c-card-body>
+            <c-card-footer>
+                <div class="d-grid gap-2">
+                    <button cButton color="success">
+                    <svg cIcon class="me-2" name="cil-save"></svg> Kaydet
+                    </button>
+                </div>
+            </c-card-footer>
+        </c-card>
+    </c-col>
+    <c-col xs="12" md="6">
+        <!-- <c-card class="mb-4">
+            <c-card-header>
+                <button cButton color="link" [cModalToggle]="addStockMarketAssetsModal.id">
+                    <svg cIcon class="me-2" name="cil-plus"></svg>
+                </button>
+                Hisse Senetleri
+            </c-card-header>
+            <c-card-body>
+                <table cTable [responsive]="true" [striped]="true" *ngIf="ExchangeRateCache">
+                    <thead>
+                        <tr>
+                            <th *ngFor="let header of stockMarketAssetsTableRows">{{ header }}</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of stockMarketAssets">
+                            <td><span data-toggle="tooltip" data-placement="top"
+                                    title="{{item.stock.symbolDesc}}">{{item.stock.symbol}}</span> </td>
+                            <td>{{Intl.NumberFormat('tr-TR', {style:'currency',
+                                currency:localCurrency}).format(item.buyingPrice)}}</td>
+                            <td>{{Intl.NumberFormat('tr-TR', {style:'currency',
+                                currency:item.currency}).format(item.amount)}}</td>
+                            <td>{{Intl.NumberFormat('tr-TR', {style:'currency',
+                                currency:item.currency}).format(item.buyingPrice * item.amount)}}</td>
+                            <td>{{Intl.NumberFormat('tr-TR', {style:'currency',
+                                currency:localCurrency}).format(item.currentPrice)}}</td>
+                            <td>{{Intl.NumberFormat('tr-TR', {style:'currency',
+                                currency:localCurrency}).format(item.currentAmount)}}</td>
+                            <td>{{Intl.NumberFormat('tr-TR', {style:'currency',
+                                currency:localCurrency}).format(item.profitAndLoss)}}</td>
+                            <td>{{Intl.NumberFormat('tr-TR').format(item.profitAndLossPercentage)}}%</td>
+                            <td>
+                                <button cButton color="link" size="sm" style="color: red;">
+                                    <svg cIcon class="me-2" name="cil-trash"></svg>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </c-card-body>
+        </c-card> -->
+    </c-col>
+</c-row>
+<c-row ngPreserveWhitespaces>
+    <c-col xs="12" md="6">
+        <!-- <c-card class="mb-4">
+            <c-card-header>
+                <button cButton color="link" [cModalToggle]="addFundTradingModal.id">
+                    <svg cIcon class="me-2" name="cil-plus"></svg>
+                </button>
+                Fonlar
+            </c-card-header>
+            <c-card-body>
+                <table cTable [responsive]="true" [striped]="true" *ngIf="ExchangeRateCache">
+                    <thead>
+                        <tr>
+                            <th *ngFor="let header of foreignExchangeTableRows">{{ header }}</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of foreignExchangeAssets">
+                            <td>{{item.currency}}</td>
+                            <td>{{Intl.NumberFormat('tr-TR', {style:'currency', currency:localCurrency}).format(item.buying)}}</td>
+                            <td>{{Intl.NumberFormat('tr-TR', {style:'currency', currency:item.currency}).format(item.amount)}}</td>
+                            <td>{{Intl.NumberFormat('tr-TR', {style:'currency', currency:item.currency}).format(item.buying * item.amount)}}</td>
+                            <td>{{Intl.NumberFormat('tr-TR', {style:'currency', currency:localCurrency}).format(ExchangeRateCache[item.currency].buying)}}</td>
+                            <td>{{Intl.NumberFormat('tr-TR', {style:'currency', currency:localCurrency}).format(item.amount * ExchangeRateCache[item.currency].buying)}}</td>x
+                            <td>{{Intl.NumberFormat('tr-TR', {style:'currency', currency:localCurrency}).format(calculateProfit(item.buying, item.amount, ExchangeRateCache[item.currency].buying))}}</td>
+                            <td>{{Intl.NumberFormat('tr-TR').format(calculateProfitRatio(item.buying, item.amount, ExchangeRateCache[item.currency].buying))}}%</td>
+                            <td>
+                                <button cButton color="link" size="sm" style="color: red;">
+                                    <svg cIcon class="me-2" name="cil-trash"></svg>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </c-card-body>
+        </c-card> -->
+    </c-col>
+    <c-col xs="12" md="6">
+        <!-- <c-card class="mb-4">
+            <c-card-header>
+                <button cButton color="link">
+                    <svg cIcon class="me-2" name="cil-plus"></svg>
+                </button>
+                Hisse Senetleri
+            </c-card-header>
+            <c-card-body>
+                <table cTable [responsive]="true" [striped]="true">
+                    <thead>
+                        <tr>
+                            <th *ngFor="let header of stockMarketAssetsTableRows">{{ header }}</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of stockMarketAssets">
+                            <td><span data-toggle="tooltip" data-placement="top"
+                                    title="{{item.stock.symbolDesc}}">{{item.stock.symbol}}</span> </td>
+                            <td>{{Intl.NumberFormat('tr-TR', {style:'currency',
+                                currency:localCurrency}).format(item.buyingPrice)}}</td>
+                            <td>{{Intl.NumberFormat('tr-TR', {style:'currency',
+                                currency:item.currency}).format(item.amount)}}</td>
+                            <td>{{Intl.NumberFormat('tr-TR', {style:'currency',
+                                currency:item.currency}).format(item.buyingPrice * item.amount)}}</td>
+                            <td>{{Intl.NumberFormat('tr-TR', {style:'currency',
+                                currency:localCurrency}).format(item.currentPrice)}}</td>
+                            <td>{{Intl.NumberFormat('tr-TR', {style:'currency',
+                                currency:localCurrency}).format(item.currentAmount)}}</td>
+                            <td>{{Intl.NumberFormat('tr-TR', {style:'currency',
+                                currency:localCurrency}).format(item.profitAndLoss)}}</td>
+                            <td>{{Intl.NumberFormat('tr-TR').format(item.profitAndLossPercentage)}}%</td>
+                            <td>
+                                <button cButton color="link" size="sm" style="color: red;">
+                                    <svg cIcon class="me-2" name="cil-trash"></svg>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </c-card-body>
+        </c-card> -->
+    </c-col>
+</c-row>
+
+<c-modal #addForeignExchangeFormModal backdrop="static" id="addForeignExchangeFormModal">
+    <c-modal-header>
+        <h5 cModalTitle>Döviz Ve Değerli Madenler</h5>
+        <button [cModalToggle]="addForeignExchangeFormModal.id" cButtonClose></button>
+    </c-modal-header>
+    <c-modal-body>
+        <form cForm>
+            <div class="mb-3">
+                <label cLabel>Alış Tarihi</label>
+                <input cFormControl type="date" [(ngModel)]="addForeignExchangeForm.date"
+                    [ngModelOptions]="{standalone: true}" />
+            </div>
+            <div class="mb-3">
+                <label cLabel>Döviz Tipi</label>
+                <select aria-label="Default select example" cSelect [(ngModel)]="addForeignExchangeForm.currency"
+                    [ngModelOptions]="{standalone: true}" (change)="setBuying();calculateTotal()">
+                    <option value="{{item.currencyCode}}" *ngFor="let item of ExchangeRateList">{{item.name}}</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label cLabel>Alış Fiyatı</label>
+                <input cFormControl type="text" [(ngModel)]="addForeignExchangeForm.buying"
+                    [ngModelOptions]="{standalone: true}" (change)="calculateTotal()" />
+            </div>
+            <div class="mb-3">
+                <label cLabel>Miktar</label>
+                <input cFormControl type="text" [(ngModel)]="addForeignExchangeForm.amount" [value]="0"
+                    [ngModelOptions]="{standalone: true}" (change)="calculateTotal()" />
+            </div>
+            <div class="mb-3">
+                <label cLabel>Toplam</label>
+                <input cFormControl disabled="true" type="text" [(ngModel)]="addForeignExchangeForm.total"
+                    [ngModelOptions]="{standalone: true}" />
+            </div>
+        </form>
+    </c-modal-body>
+    <c-modal-footer>
+        <button [cModalToggle]="addForeignExchangeFormModal.id" cButton color="secondary">
+            İptal
+        </button>
+        <button cButton color="primary" (click)="add(WealthType.FOREIGN_EXCHANGE_AND_PRECIOUS_METALS, addForeignExchangeForm)">Ekle</button>
+    </c-modal-footer>
+</c-modal>
+
+<!-- 
+<c-modal #addStockMarketAssetsModal backdrop="static" id="addStockMarketAssetsModal">
+    <c-modal-header>
+        <h5 cModalTitle>Hisse Senetleri</h5>
+        <button [cModalToggle]="addStockMarketAssetsModal.id" cButtonClose></button>
+    </c-modal-header>
+    <c-modal-body>
+        <form cForm>
+            <div class="mb-3">
+                <label cLabel>Alış Tarihi</label>
+                <input cFormControl type="date" [(ngModel)]="addForeignExchangeForm.date"
+                    [ngModelOptions]="{standalone: true}" />
+            </div>
+            <div class="mb-3">
+                <label cLabel>Sembol</label>
+                <select aria-label="Default select example" cSelect [(ngModel)]="addForeignExchangeForm.currency"
+                    [ngModelOptions]="{standalone: true}" (change)="setBuying();calculateTotal()">
+                    <option value="{{item.currencyCode}}" *ngFor="let item of ExchangeRateList">{{item.name}}</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label cLabel>Alış Fiyatı</label>
+                <input cFormControl type="text" [(ngModel)]="addForeignExchangeForm.buying"
+                    [ngModelOptions]="{standalone: true}" (change)="calculateTotal()" />
+            </div>
+            <div class="mb-3">
+                <label cLabel>Miktar</label>
+                <input cFormControl type="text" [(ngModel)]="addForeignExchangeForm.amount" [value]="0"
+                    [ngModelOptions]="{standalone: true}" (change)="calculateTotal()" />
+            </div>
+            <div class="mb-3">
+                <label cLabel>Toplam</label>
+                <input cFormControl disabled="true" type="text" [(ngModel)]="addForeignExchangeForm.total"
+                    [ngModelOptions]="{standalone: true}" />
+            </div>
+        </form>
+    </c-modal-body>
+    <c-modal-footer>
+        <button [cModalToggle]="addStockMarketAssetsModal.id" cButton color="secondary">
+            İptal
+        </button>
+        <button cButton color="primary" (click)="add(WealthType.STOCK_TRADING, addForeignExchangeForm)">Ekle</button>
+    </c-modal-footer>
+</c-modal>
+
+<c-modal #addFundTradingModal backdrop="static" id="addFundTradingModal">
+    <c-modal-header>
+        <h5 cModalTitle>Fonlar</h5>
+        <button [cModalToggle]="addFundTradingModal.id" cButtonClose></button>
+    </c-modal-header>
+    <c-modal-body>
+        <form cForm>
+            <div class="mb-3">
+                <label cLabel>Alış Tarihi</label>
+                <input cFormControl type="date" [(ngModel)]="addForeignExchangeForm.date"
+                    [ngModelOptions]="{standalone: true}" />
+            </div>
+            <div class="mb-3">
+                <label cLabel>Sembol</label>
+                <select aria-label="Default select example" cSelect [(ngModel)]="addForeignExchangeForm.currency"
+                    [ngModelOptions]="{standalone: true}" (change)="setBuying();calculateTotal()">
+                    <option value="{{item.currencyCode}}" *ngFor="let item of ExchangeRateList">{{item.name}}</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label cLabel>Alış Fiyatı</label>
+                <input cFormControl type="text" [(ngModel)]="addForeignExchangeForm.buying"
+                    [ngModelOptions]="{standalone: true}" (change)="calculateTotal()" />
+            </div>
+            <div class="mb-3">
+                <label cLabel>Miktar</label>
+                <input cFormControl type="text" [(ngModel)]="addForeignExchangeForm.amount" [value]="0"
+                    [ngModelOptions]="{standalone: true}" (change)="calculateTotal()" />
+            </div>
+            <div class="mb-3">
+                <label cLabel>Toplam</label>
+                <input cFormControl disabled="true" type="text" [(ngModel)]="addForeignExchangeForm.total"
+                    [ngModelOptions]="{standalone: true}" />
+            </div>
+        </form>
+    </c-modal-body>
+    <c-modal-footer>
+        <button [cModalToggle]="addFundTradingModal.id" cButton color="secondary">
+            İptal
+        </button>
+        <button cButton color="primary" (click)="saveAddForeignExchangeForm">Ekle</button>
+    </c-modal-footer>
+</c-modal> -->

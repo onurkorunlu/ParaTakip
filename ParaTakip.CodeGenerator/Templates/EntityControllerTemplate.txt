@@ -1,0 +1,124 @@
+﻿using ParaTakip.Business.Interfaces;
+using ParaTakip.Core;
+using ParaTakip.Entities;
+using ParaTakip.Model.RequestModel;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
+namespace ParaTakip.Controllers
+{
+    [ApiController]
+    [Route("[controller]/[action]")]
+    [Authorize]
+    public class @EntityNameController : ParaTakipController
+    {
+
+      [HttpGet]
+        public ActionResult<List<@EntityName>> Get()
+        {
+            try
+            {
+                return Ok(AppServiceProvider.Instance.Get<I@EntityNameService>().GetAll());
+            }
+            catch (AppException e)
+            {
+                return BadRequest(e.Message);
+            }
+            catch (Exception ex)
+            {
+                var e = new AppException(ReturnMessages.GENERIC_ERROR, ex);
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult<@EntityName> Add(Add@EntityNameRequestModel model)
+        {
+            try
+            {
+                CheckModelState(model);
+
+                @EntityName addModel = new @EntityName
+                {
+                    //Fill Here
+                };
+
+                return Ok(AppServiceProvider.Instance.Get<I@EntityNameService>().Create(addModel));
+            }
+            catch (AppException e)
+            {
+                return BadRequest(e.Message);
+            }
+            catch (Exception ex)
+            {
+                var e = new AppException(ReturnMessages.GENERIC_ERROR, ex);
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult<@EntityName> Update(Update@EntityNameRequestModel model)
+        {
+            try
+            {
+                CheckModelState(model);
+
+                var updateModel = AppServiceProvider.Instance.Get<I@EntityNameService>().GetById(model.Id);
+                if (updateModel != null)
+                {
+                    //Fill Here
+                    AppServiceProvider.Instance.Get<I@EntityNameService>().Update(updateModel);
+                }
+                else
+                {
+                    throw new AppException(ReturnMessages.ITEM_NOT_FOUND, model);
+                }
+
+                return Ok(updateModel);
+            }
+            catch (AppException e)
+            {
+                return BadRequest(e.Message);
+            }
+            catch (Exception ex)
+            {
+                var e = new AppException(ReturnMessages.GENERIC_ERROR, ex);
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpDelete]
+        public ActionResult<@EntityName> Delete([FromQuery]string Id)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(Id))
+                {
+                    throw new AppException(ReturnMessages.INVALID_PARAMETER, Id, "Id");
+                }
+
+                var deleteModel = AppServiceProvider.Instance.Get<I@EntityNameService>().GetById(Id);
+                if (deleteModel != null)
+                {
+                    AppServiceProvider.Instance.Get<I@EntityNameService>().DeleteById(Id);
+                }
+                else
+                {
+                    throw new AppException(ReturnMessages.ITEM_NOT_FOUND, Id);
+                }
+
+                return Ok(deleteModel);
+            }
+            catch (AppException e)
+            {
+                return BadRequest(e.Message);
+            }
+            catch (Exception ex)
+            {
+                var e = new AppException(ReturnMessages.GENERIC_ERROR, ex);
+                return BadRequest(e.Message);
+            }
+        }
+
+    }
+}

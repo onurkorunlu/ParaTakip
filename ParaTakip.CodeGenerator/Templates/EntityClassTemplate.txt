@@ -1,0 +1,6 @@
+﻿namespace ParaTakip.Entities
+{
+    public class @EntityName : MongoBaseEntity
+    {
+    }
+}
