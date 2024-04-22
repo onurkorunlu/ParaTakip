@@ -9,7 +9,7 @@ using static ParaTakip.Entities.ExchangeRate;
 namespace ParaTakip.Controllers
 {
     [ApiController]
-    [Route("[controller]/[action]")]
+    [Route("api/[controller]/[action]")]
     //[Authorize]
     public class ExchangeRateController : ParaTakipController
     {

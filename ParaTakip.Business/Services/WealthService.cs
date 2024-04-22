@@ -29,8 +29,10 @@ namespace ParaTakip.Business.Services
                     baseWealthValue.AddRange(CastForeignExchangeAndPreciousMetals(model.WealthValues));
                     break;
                 case Entities.Enums.WealthType.STOCK_TRADING:
+                    baseWealthValue.AddRange(CastStockTradings(model.WealthValues));
                     break;
                 case Entities.Enums.WealthType.FUND_TRADING:
+                    baseWealthValue.AddRange(CastFundTradings(model.WealthValues));
                     break;
                 default:
                     break;
@@ -63,6 +65,28 @@ namespace ParaTakip.Business.Services
             foreach (var val in values)
             {
                 result.Add(Newtonsoft.Json.JsonConvert.DeserializeObject<Wealth.ForeignExchangeAndPreciousMetals>(val.ToString()));
+            }
+
+            return result;
+        }
+
+        private IEnumerable<BaseWealthValue> CastStockTradings(List<object> values)
+        {
+            List<StockTrading> result = new List<StockTrading>();
+            foreach (var val in values)
+            {
+                result.Add(Newtonsoft.Json.JsonConvert.DeserializeObject<Wealth.StockTrading>(val.ToString()));
+            }
+
+            return result;
+        }
+
+        private IEnumerable<BaseWealthValue> CastFundTradings(List<object> values)
+        {
+            List<FundTrading> result = new List<FundTrading>();
+            foreach (var val in values)
+            {
+                result.Add(Newtonsoft.Json.JsonConvert.DeserializeObject<Wealth.FundTrading>(val.ToString()));
             }
 
             return result;

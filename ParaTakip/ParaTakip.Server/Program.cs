@@ -1,11 +1,8 @@
-using log4net.Config;
+using JsonSubTypes;
 using ParaTakip.Configuration;
 using ParaTakip.Core;
-using ParaTakip.PythonIntegrator;
-using Newtonsoft;
-using JsonSubTypes;
-using static ParaTakip.Entities.Wealth;
 using ParaTakip.Entities.Enums;
+using static ParaTakip.Entities.Wealth;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace ParaTakip.Controllers
 {
     [ApiController]
-    [Route("[controller]/[action]")]
+    [Route("api/[controller]/[action]")]
     [Authorize]
     public class AppUserRoleController : ParaTakipController
     {

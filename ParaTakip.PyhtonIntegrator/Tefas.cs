@@ -7,17 +7,30 @@ using static System.Formats.Asn1.AsnWriter;
 using Python.Runtime;
 using System.Reflection.Metadata;
 using System.Text.RegularExpressions;
+using ParaTakip.Common;
 
 namespace ParaTakip.PythonIntegrator
 {
-    public static class Tefas
+    public class Tefas
     {
-        public static decimal GetFundPrice(string fundCode)
+        public Tefas()
         {
-
-            var code = File.ReadAllText("py/tefas.py");
             Runtime.PythonDLL = "python38.dll";
             PythonEngine.Initialize();
+            PythonEngine.BeginAllowThreads();
+        }
+
+        public new static Tefas Instance
+        {
+            get
+            {
+                return SingletonProvider<Tefas>.Instance;
+            }
+        }
+
+        public decimal GetFundPrice(string fundCode)
+        {
+            var code = File.ReadAllText("py/tefas.py");
             using (Py.GIL())
             {
                 using dynamic scope = Py.CreateScope();

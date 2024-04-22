@@ -9,7 +9,7 @@ using ParaTakip.Model.ResponseModel;
 namespace ParaTakip.Controllers
 {
     [ApiController]
-    [Route("[controller]/[action]")]
+    [Route("api/[controller]/[action]")]
     [Authorize]
     public class AppUserController : ParaTakipController
     {

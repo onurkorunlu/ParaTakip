@@ -10,7 +10,7 @@ using static ParaTakip.Entities.Wealth;
 namespace ParaTakip.Controllers
 {
     [ApiController]
-    [Route("[controller]/[action]")]
+    [Route("api/[controller]/[action]")]
     [Authorize]
     public class WealthController : ParaTakipController
     {

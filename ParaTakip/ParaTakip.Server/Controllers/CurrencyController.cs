@@ -6,7 +6,7 @@ using ParaTakip.Core;
 namespace ParaTakip.Server.Controllers
 {
     [ApiController]
-    [Route("[controller]/[action]")]
+    [Route("api/[controller]/[action]")]
     //[Authorize]
     public class CurrencyController : ParaTakipController
     {

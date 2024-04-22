@@ -11,4 +11,8 @@
     <PackageReference Include="pythonnet" Version="3.0.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ParaTakip.Common\ParaTakip.Common.csproj" />
+  </ItemGroup>
+
 </Project>

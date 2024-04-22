@@ -339,5 +339,9 @@ namespace ParaTakip.Common
             return date;
         }
 
+        public static string ToUniDecimal(this string val)
+        {
+            return val.Replace(".", "*").Replace(",", ".").Replace("*", ",");
+        }
     }
 }

@@ -18,7 +18,7 @@
                     </thead>
                     <tbody *ngIf="wealth.values">
                         <tr *ngFor="let item of wealth.values[WealthType[WealthType.FOREIGN_EXCHANGE_AND_PRECIOUS_METALS]]">
-                            <td>{{item.currency}}</td><!--Para Birimi-->
+                            <td><label data-toggle="tooltip" data-placement="top" title="{{ExchangeRateCache[item.currency].name}}">{{item.currency}}</label></td><!--Para Birimi-->
                             <td>{{Intl.NumberFormat('tr-TR', {style:'currency', currency:localCurrency}).format(item.buying)}}</td><!--Alış Fiyatı-->
                             <td>{{Intl.NumberFormat('tr-TR', {style:'currency', currency:item.currency}).format(item.amount)}}</td><!--Miktar-->
                             <td>{{Intl.NumberFormat('tr-TR', {style:'currency', currency:item.currency}).format(item.buying * item.amount)}}</td><!--Maliyet-->
@@ -27,7 +27,7 @@
                             <td>{{Intl.NumberFormat('tr-TR', {style:'currency', currency:localCurrency}).format(calculateProfit(item.buying, item.amount, ExchangeRateCache[item.currency].buying))}}</td><!--Kar&Zarar%-->
                             <td>{{Intl.NumberFormat('tr-TR').format(calculateProfitRatio(item.buying, item.amount, ExchangeRateCache[item.currency].buying))}}%</td><!--Kar&Zarar%-->
                             <td>
-                                <button cButton color="link" size="sm" style="color: red;">
+                                <button cButton color="link" size="sm" style="color: red;" (click)="delete(item, WealthType.FOREIGN_EXCHANGE_AND_PRECIOUS_METALS)">
                                     <svg cIcon class="me-2" name="cil-trash"></svg>
                                 </button>
                             </td>
@@ -47,40 +47,34 @@
         </c-card>
     </c-col>
     <c-col xs="12" md="6">
-        <!-- <c-card class="mb-4">
+        <c-card class="mb-4">
             <c-card-header>
-                <button cButton color="link" [cModalToggle]="addStockMarketAssetsModal.id">
+                <button cButton color="link" [cModalToggle]="addStockTradeForm.id">
                     <svg cIcon class="me-2" name="cil-plus"></svg>
                 </button>
                 Hisse Senetleri
+                
             </c-card-header>
             <c-card-body>
-                <table cTable [responsive]="true" [striped]="true" *ngIf="ExchangeRateCache">
+                <table cTable [responsive]="true" [striped]="true">
                     <thead>
                         <tr>
                             <th *ngFor="let header of stockMarketAssetsTableRows">{{ header }}</th>
                             <th></th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr *ngFor="let item of stockMarketAssets">
-                            <td><span data-toggle="tooltip" data-placement="top"
-                                    title="{{item.stock.symbolDesc}}">{{item.stock.symbol}}</span> </td>
-                            <td>{{Intl.NumberFormat('tr-TR', {style:'currency',
-                                currency:localCurrency}).format(item.buyingPrice)}}</td>
-                            <td>{{Intl.NumberFormat('tr-TR', {style:'currency',
-                                currency:item.currency}).format(item.amount)}}</td>
-                            <td>{{Intl.NumberFormat('tr-TR', {style:'currency',
-                                currency:item.currency}).format(item.buyingPrice * item.amount)}}</td>
-                            <td>{{Intl.NumberFormat('tr-TR', {style:'currency',
-                                currency:localCurrency}).format(item.currentPrice)}}</td>
-                            <td>{{Intl.NumberFormat('tr-TR', {style:'currency',
-                                currency:localCurrency}).format(item.currentAmount)}}</td>
-                            <td>{{Intl.NumberFormat('tr-TR', {style:'currency',
-                                currency:localCurrency}).format(item.profitAndLoss)}}</td>
-                            <td>{{Intl.NumberFormat('tr-TR').format(item.profitAndLossPercentage)}}%</td>
+                    <tbody *ngIf="wealth.values">
+                        <tr *ngFor="let item of wealth.values[WealthType[WealthType.STOCK_TRADING]]">
+                            <td>{{item.symbol}}</td><!--Para Birimi-->
+                            <td>{{Intl.NumberFormat('tr-TR', {style:'currency', currency:localCurrency}).format(item.buying)}}</td><!--Alış Fiyatı-->
+                            <td>{{Intl.NumberFormat('tr-TR', {style:'currency', currency:localCurrency}).format(item.amount)}}</td><!--Miktar-->
+                            <td>{{Intl.NumberFormat('tr-TR', {style:'currency', currency:localCurrency}).format(item.buying * item.amount)}}</td><!--Maliyet-->
+                            <td>{{Intl.NumberFormat('tr-TR', {style:'currency', currency:localCurrency}).format(FundTradingRateCache[item.fundCode].price)}}</td><!--Güncel Fiyat-->
+                            <td>{{Intl.NumberFormat('tr-TR', {style:'currency', currency:localCurrency}).format(item.amount * FundTradingRateCache[item.fundCode].price)}}</td><!--Güncel Tutar-->
+                            <td>{{Intl.NumberFormat('tr-TR', {style:'currency', currency:localCurrency}).format(calculateProfit(item.buying, item.amount, FundTradingRateCache[item.fundCode].price))}}</td><!--Kar&Zarar%-->
+                            <td>{{Intl.NumberFormat('tr-TR').format(calculateProfitRatio(item.buying, item.amount, FundTradingRateCache[item.fundCode].price))}}%</td><!--Kar&Zarar%-->
                             <td>
-                                <button cButton color="link" size="sm" style="color: red;">
+                                <button cButton color="link" size="sm" style="color: red;" (click)="delete(item, WealthType.FUND_TRADING)">
                                     <svg cIcon class="me-2" name="cil-trash"></svg>
                                 </button>
                             </td>
@@ -88,46 +82,73 @@
                     </tbody>
                 </table>
             </c-card-body>
-        </c-card> -->
+            <c-card-footer>
+                <div class="d-grid gap-2">
+                    <button cButton color="success" (click)="save(WealthType.FUND_TRADING)">
+                    <svg cIcon class="me-2" name="cil-save"></svg> Kaydet
+                    </button>
+                </div>
+            </c-card-footer>
+        </c-card>
     </c-col>
 </c-row>
 <c-row ngPreserveWhitespaces>
     <c-col xs="12" md="6">
-        <!-- <c-card class="mb-4">
+        <c-card class="mb-4">
             <c-card-header>
                 <button cButton color="link" [cModalToggle]="addFundTradingModal.id">
                     <svg cIcon class="me-2" name="cil-plus"></svg>
                 </button>
                 Fonlar
+                
             </c-card-header>
             <c-card-body>
                 <table cTable [responsive]="true" [striped]="true" *ngIf="ExchangeRateCache">
                     <thead>
                         <tr>
-                            <th *ngFor="let header of foreignExchangeTableRows">{{ header }}</th>
+                            <th *ngFor="let header of fundsTableRows">{{ header }}</th>
                             <th></th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr *ngFor="let item of foreignExchangeAssets">
-                            <td>{{item.currency}}</td>
-                            <td>{{Intl.NumberFormat('tr-TR', {style:'currency', currency:localCurrency}).format(item.buying)}}</td>
-                            <td>{{Intl.NumberFormat('tr-TR', {style:'currency', currency:item.currency}).format(item.amount)}}</td>
-                            <td>{{Intl.NumberFormat('tr-TR', {style:'currency', currency:item.currency}).format(item.buying * item.amount)}}</td>
-                            <td>{{Intl.NumberFormat('tr-TR', {style:'currency', currency:localCurrency}).format(ExchangeRateCache[item.currency].buying)}}</td>
-                            <td>{{Intl.NumberFormat('tr-TR', {style:'currency', currency:localCurrency}).format(item.amount * ExchangeRateCache[item.currency].buying)}}</td>x
-                            <td>{{Intl.NumberFormat('tr-TR', {style:'currency', currency:localCurrency}).format(calculateProfit(item.buying, item.amount, ExchangeRateCache[item.currency].buying))}}</td>
-                            <td>{{Intl.NumberFormat('tr-TR').format(calculateProfitRatio(item.buying, item.amount, ExchangeRateCache[item.currency].buying))}}%</td>
+                    <tbody *ngIf="wealth.values">
+                        <tr *ngFor="let item of wealth.values[WealthType[WealthType.FUND_TRADING]]">
+                            <td><label [cPopover]="popoverHtml" cPopoverPlacement="bottom" [cPopoverTrigger]="'click'">{{item.fundCode}}</label></td><!--Para Birimi-->
+                            <td>{{Intl.NumberFormat('tr-TR', {style:'currency', currency:localCurrency}).format(item.buying)}}</td><!--Alış Fiyatı-->
+                            <td>{{Intl.NumberFormat('tr-TR', {style:'currency', currency:localCurrency}).format(item.amount)}}</td><!--Miktar-->
+                            <td>{{Intl.NumberFormat('tr-TR', {style:'currency', currency:localCurrency}).format(item.buying * item.amount)}}</td><!--Maliyet-->
+                            <td>{{Intl.NumberFormat('tr-TR', {style:'currency', currency:localCurrency}).format(FundTradingRateCache[item.fundCode].price)}}</td><!--Güncel Fiyat-->
+                            <td>{{Intl.NumberFormat('tr-TR', {style:'currency', currency:localCurrency}).format(item.amount * FundTradingRateCache[item.fundCode].price)}}</td><!--Güncel Tutar-->
+                            <td>{{Intl.NumberFormat('tr-TR', {style:'currency', currency:localCurrency}).format(calculateProfit(item.buying, item.amount, FundTradingRateCache[item.fundCode].price))}}</td><!--Kar&Zarar%-->
+                            <td>{{Intl.NumberFormat('tr-TR').format(calculateProfitRatio(item.buying, item.amount, FundTradingRateCache[item.fundCode].price))}}%</td><!--Kar&Zarar%-->
                             <td>
-                                <button cButton color="link" size="sm" style="color: red;">
+                                <button cButton color="link" size="sm" style="color: red;" (click)="delete(item, WealthType.FUND_TRADING)">
                                     <svg cIcon class="me-2" name="cil-trash"></svg>
                                 </button>
                             </td>
+                            <ng-template #popoverHtml>
+                                <h3 class="popover-header">
+                                  {{FundTradingRateCache[item.fundCode].name}}
+                                </h3>
+                                <div class="popover-body">
+                                  <p>Kategori : {{FundTradingRateCache[item.fundCode].category}}</p>
+                                  <p>Son Fiyat : {{Intl.NumberFormat('tr-TR', {style:'currency', currency:localCurrency}).format(FundTradingRateCache[item.fundCode].price)}}</p>
+                                  <p>Günlük Getiri : {{Intl.NumberFormat('tr-TR', {style:'currency', currency:localCurrency}).format(FundTradingRateCache[item.fundCode].dailyReturn)}}</p>
+                                  <p>Pay (Adet) : {{Intl.NumberFormat('tr-TR', {style:'currency', currency:localCurrency}).format(FundTradingRateCache[item.fundCode].shares)}}</p>
+                                  <p>Fon Toplam Değer : {{Intl.NumberFormat('tr-TR', {style:'currency', currency:localCurrency}).format(FundTradingRateCache[item.fundCode].fundTotalValue)}}</p>
+                                </div>
+                              </ng-template>
                         </tr>
                     </tbody>
                 </table>
             </c-card-body>
-        </c-card> -->
+            <c-card-footer>
+                <div class="d-grid gap-2">
+                    <button cButton color="success" (click)="save(WealthType.FUND_TRADING)">
+                    <svg cIcon class="me-2" name="cil-save"></svg> Kaydet
+                    </button>
+                </div>
+            </c-card-footer>
+        </c-card>
     </c-col>
     <c-col xs="12" md="6">
         <!-- <c-card class="mb-4">
@@ -190,19 +211,19 @@
             <div class="mb-3">
                 <label cLabel>Döviz Tipi</label>
                 <select aria-label="Default select example" cSelect [(ngModel)]="addForeignExchangeForm.currency"
-                    [ngModelOptions]="{standalone: true}" (change)="setBuying();calculateTotal()">
+                    [ngModelOptions]="{standalone: true}" (change)="setBuying(addForeignExchangeForm);calculateTotal(addForeignExchangeForm)">
                     <option value="{{item.currencyCode}}" *ngFor="let item of ExchangeRateList">{{item.name}}</option>
                 </select>
             </div>
             <div class="mb-3">
                 <label cLabel>Alış Fiyatı</label>
                 <input cFormControl type="text" [(ngModel)]="addForeignExchangeForm.buying"
-                    [ngModelOptions]="{standalone: true}" (change)="calculateTotal()" />
+                    [ngModelOptions]="{standalone: true}" (change)="calculateTotal(addForeignExchangeForm)" />
             </div>
             <div class="mb-3">
                 <label cLabel>Miktar</label>
                 <input cFormControl type="text" [(ngModel)]="addForeignExchangeForm.amount" [value]="0"
-                    [ngModelOptions]="{standalone: true}" (change)="calculateTotal()" />
+                    [ngModelOptions]="{standalone: true}" (change)="calculateTotal(addForeignExchangeForm)" />
             </div>
             <div class="mb-3">
                 <label cLabel>Toplam</label>
@@ -213,7 +234,7 @@
     </c-modal-body>
     <c-modal-footer>
         <button [cModalToggle]="addForeignExchangeFormModal.id" cButton color="secondary">
-            İptal
+            Kapat
         </button>
         <button cButton color="primary" (click)="add(WealthType.FOREIGN_EXCHANGE_AND_PRECIOUS_METALS, addForeignExchangeForm)">Ekle</button>
     </c-modal-footer>
@@ -263,7 +284,7 @@
         <button cButton color="primary" (click)="add(WealthType.STOCK_TRADING, addForeignExchangeForm)">Ekle</button>
     </c-modal-footer>
 </c-modal>
-
+-->
 <c-modal #addFundTradingModal backdrop="static" id="addFundTradingModal">
     <c-modal-header>
         <h5 cModalTitle>Fonlar</h5>
@@ -273,29 +294,34 @@
         <form cForm>
             <div class="mb-3">
                 <label cLabel>Alış Tarihi</label>
-                <input cFormControl type="date" [(ngModel)]="addForeignExchangeForm.date"
+                <input cFormControl type="date" [(ngModel)]="addFundsForm.date"
                     [ngModelOptions]="{standalone: true}" />
             </div>
             <div class="mb-3">
-                <label cLabel>Sembol</label>
-                <select aria-label="Default select example" cSelect [(ngModel)]="addForeignExchangeForm.currency"
-                    [ngModelOptions]="{standalone: true}" (change)="setBuying();calculateTotal()">
-                    <option value="{{item.currencyCode}}" *ngFor="let item of ExchangeRateList">{{item.name}}</option>
-                </select>
+                <label cLabel>Fon</label>
+                <c-input-group class="mb-3">
+                    <input cFormControl [(ngModel)]="addFundsForm.fundCode" [ngModelOptions]="{standalone: true}" 
+                    (change)="setBuying(addFundsForm);calculateTotal(addFundsForm)"/>
+                    <button cButton color="secondary" id="button-addon2" type="button" variant="outline" 
+                    [disabled]="addFundsForm.fundCode==''" (click)="getFundBuyingPrice()">
+                      Güncel Fon Değerini Bul
+                    </button>
+                  </c-input-group>
+                      
             </div>
             <div class="mb-3">
                 <label cLabel>Alış Fiyatı</label>
-                <input cFormControl type="text" [(ngModel)]="addForeignExchangeForm.buying"
-                    [ngModelOptions]="{standalone: true}" (change)="calculateTotal()" />
+                <input cFormControl type="text" [(ngModel)]="addFundsForm.buying"
+                    [ngModelOptions]="{standalone: true}" (change)="calculateTotal(addFundsForm)" />
             </div>
             <div class="mb-3">
                 <label cLabel>Miktar</label>
-                <input cFormControl type="text" [(ngModel)]="addForeignExchangeForm.amount" [value]="0"
-                    [ngModelOptions]="{standalone: true}" (change)="calculateTotal()" />
+                <input cFormControl type="text" [(ngModel)]="addFundsForm.amount" [value]="0"
+                    [ngModelOptions]="{standalone: true}" (change)="calculateTotal(addFundsForm)" />
             </div>
             <div class="mb-3">
                 <label cLabel>Toplam</label>
-                <input cFormControl disabled="true" type="text" [(ngModel)]="addForeignExchangeForm.total"
+                <input cFormControl disabled="true" type="text" [(ngModel)]="addFundsForm.total"
                     [ngModelOptions]="{standalone: true}" />
             </div>
         </form>
@@ -304,6 +330,6 @@
         <button [cModalToggle]="addFundTradingModal.id" cButton color="secondary">
             İptal
         </button>
-        <button cButton color="primary" (click)="saveAddForeignExchangeForm">Ekle</button>
+        <button cButton color="primary" (click)="add(WealthType.FUND_TRADING, addFundsForm)" [disabled]="addFundsForm.buying<=0">Ekle</button>
     </c-modal-footer>
-</c-modal> -->
+</c-modal> 

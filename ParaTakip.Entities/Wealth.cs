@@ -37,7 +37,10 @@ namespace ParaTakip.Entities
 
         public class FundTrading: BaseWealthValue
         {
-
+            public decimal Amount { get; set; }
+            public decimal Buying { get; set; }
+            public string FundCode { get; set; }
+            public DateTime Date { get; set; }
         }
 
         [BsonDiscriminator(RootClass = true)]

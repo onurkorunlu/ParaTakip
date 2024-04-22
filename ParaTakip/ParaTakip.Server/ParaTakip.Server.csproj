@@ -27,7 +27,6 @@
     <ProjectReference Include="..\..\ParaTakip.Core\ParaTakip.Core.csproj" />
     <ProjectReference Include="..\..\ParaTakip.Entities\ParaTakip.Entities.csproj" />
     <ProjectReference Include="..\..\ParaTakip.Model\ParaTakip.Model.csproj" />
-    <ProjectReference Include="..\..\ParaTakip.PyhtonIntegrator\ParaTakip.PyhtonIntegrator.csproj" />
     <ProjectReference Include="..\paratakip.client\paratakip.client.esproj">
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>

@@ -10,7 +10,7 @@ namespace ParaTakip.Business.Caches
 {
     public class ExchangeRateCache : CacheBase<CurrencyInfo>
     {
-        public ExchangeRateCache(): base("CurrencyCache")
+        public ExchangeRateCache(): base("ExchangeRateCache")
         {
         }
 
@@ -30,6 +30,11 @@ namespace ParaTakip.Business.Caches
             if (rates == null)
             {
                 return dictonary;
+            }
+
+            if (rates.Date != DateTime.Now.Date)
+            {
+                
             }
 
             foreach (var rate in rates.CurrencyDictionary)

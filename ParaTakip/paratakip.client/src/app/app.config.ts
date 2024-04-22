@@ -53,5 +53,5 @@ export const appConfig: AppModule = {
 };
 
 export function getBaseUrl() {
-  return '/';
+  return '/api/';
 }

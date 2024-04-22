@@ -12,7 +12,6 @@
     <ProjectReference Include="..\ParaTakip.DataAccess\ParaTakip.DataAccess.csproj" />
     <ProjectReference Include="..\ParaTakip.Entities\ParaTakip.Entities.csproj" />
     <ProjectReference Include="..\ParaTakip.Model\ParaTakip.Model.csproj" />
-    <ProjectReference Include="..\ParaTakip.PyhtonIntegrator\ParaTakip.PyhtonIntegrator.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -21,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.60" />
     <PackageReference Include="log4net" Version="2.0.17" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="8.0.0" />

@@ -1,15 +1,30 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ParaTakip.Business.Caches;
 using ParaTakip.Core;
-using ParaTakip.PythonIntegrator;
-using static ParaTakip.Entities.ExchangeRate;
 
 namespace ParaTakip.Server.Controllers
 {
     [ApiController]
-    [Route("[controller]/[action]")]
+    [Route("api/[controller]/[action]")]
     public class FundTrading : ParaTakipController
     {
+        [HttpGet]
+        public ActionResult<Dictionary<string, decimal>> Get()
+        {
+            try
+            {
+                return Ok(FundRefundCache.Instance.Values);
+            }
+            catch (AppException e)
+            {
+                return BadRequest(e.Message);
+            }
+            catch (Exception ex)
+            {
+                var e = new AppException(ReturnMessages.GENERIC_ERROR, ex);
+                return BadRequest(e.Message);
+            }
+        }
 
         [HttpGet]
         public ActionResult<decimal> GetFundValue(string fundCode)

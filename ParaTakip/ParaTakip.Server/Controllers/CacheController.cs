@@ -11,7 +11,7 @@ using static ParaTakip.Entities.ExchangeRate;
 namespace ParaTakip.Server.Controllers
 {
     [ApiController]
-    [Route("[controller]/[action]")]
+    [Route("api/[controller]/[action]")]
     public class CacheController : ParaTakipController
     {
         private static readonly ILog Logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);

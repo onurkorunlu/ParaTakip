@@ -1,6 +1,6 @@
 import { DatePipe, NgFor, NgIf } from "@angular/common";
 import { FormControl, FormsModule, NgControl, NgModel, ReactiveFormsModule } from "@angular/forms";
-import { CardComponent, CardHeaderComponent, CardBodyComponent, CardFooterComponent, RowComponent, ColComponent, TableDirective, ButtonGroupComponent, ButtonDirective, FormCheckLabelDirective, ProgressBarDirective, ProgressComponent, TextColorDirective, GutterDirective, AvatarComponent, ModalComponent, ModalHeaderComponent, ModalBodyComponent, ModalFooterComponent, ModalToggleDirective, FormControlDirective, ButtonCloseDirective, FormSelectDirective } from "@coreui/angular";
+import { CardComponent, CardHeaderComponent, CardBodyComponent, CardFooterComponent, RowComponent, ColComponent, TableDirective, ButtonGroupComponent, ButtonDirective, FormCheckLabelDirective, ProgressBarDirective, ProgressComponent, TextColorDirective, GutterDirective, AvatarComponent, ModalComponent, ModalHeaderComponent, ModalBodyComponent, ModalFooterComponent, ModalToggleDirective, FormControlDirective, ButtonCloseDirective, FormSelectDirective, InputGroupComponent, PopoverComponent, PopoverDirective, PopoverModule } from "@coreui/angular";
 import { ChartjsComponent } from "@coreui/angular-chartjs";
 import { IconDirective } from "@coreui/icons-angular";
 import { WidgetsBrandComponent } from "../views/widgets/widgets-brand/widgets-brand.component";
@@ -40,7 +40,9 @@ export class CommonProviders {
             FormControlDirective,
             ButtonCloseDirective,
             FormSelectDirective,
-            DatePipe
+            DatePipe,
+            InputGroupComponent,
+            PopoverComponent, PopoverDirective
         ];
     }
 }
