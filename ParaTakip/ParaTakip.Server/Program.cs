@@ -2,6 +2,10 @@ using log4net.Config;
 using ParaTakip.Configuration;
 using ParaTakip.Core;
 using ParaTakip.PythonIntegrator;
+using Newtonsoft;
+using JsonSubTypes;
+using static ParaTakip.Entities.Wealth;
+using ParaTakip.Entities.Enums;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,9 +15,38 @@ Configurations.ConfigureServices(builder.Services);
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddControllers().AddNewtonsoftJson(options =>
+{
+    //Register the subtypes of the Device (Phone and Laptop)
+    //and define the device Discriminator
+    options.SerializerSettings.Converters.Add(
+        JsonSubtypesConverterBuilder
+        .Of(typeof(BaseWealthValue), "BaseWealthValueDiscriminator")
+        .RegisterSubtype(typeof(ForeignExchangeAndPreciousMetals), WealthType.FOREIGN_EXCHANGE_AND_PRECIOUS_METALS)
+        .RegisterSubtype(typeof(StockTrading), WealthType.STOCK_TRADING)
+        .RegisterSubtype(typeof(FundTrading), WealthType.FUND_TRADING)
+        .SerializeDiscriminatorProperty()
+        .Build()
+    );
+});
+
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.UseAllOfToExtendReferenceSchemas();
+    c.UseAllOfForInheritance();
+    c.UseOneOfForPolymorphism();
+    c.SelectDiscriminatorNameUsing(type =>
+    {
+        return type.Name switch
+        {
+            nameof(BaseWealthValue) => "BaseWealthValueDiscriminator",
+            _ => null
+        };
+    });
+});
 builder.Services.AddMemoryCache();
+
 
 builder.Logging.ClearProviders();
 builder.Logging.AddLog4Net();

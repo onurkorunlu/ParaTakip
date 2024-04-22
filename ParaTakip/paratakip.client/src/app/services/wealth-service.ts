@@ -11,11 +11,11 @@ export class WealthService {
 
   constructor(public httpService: HttpService) { }
 
-  get(): Observable<Wealth> {
-    return this.httpService.get<Wealth>("wealth/get");
+  get(): Observable<any> {
+    return this.httpService.get<any>("wealth/get");
   }
 
-  update(model:Wealth[]): Observable<Wealth[]> {
+  update(model:any): Observable<Wealth[]> {
     return this.httpService.post<Wealth[]>("wealth/update", model);
   }
 }

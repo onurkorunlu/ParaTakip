@@ -24,8 +24,8 @@ import { animate } from '@angular/animations';
 export class LoginComponent {
 
   loginModel: LoginModel = <LoginModel>{
-    username: "",
-    password: ""
+    username: "testuser",
+    password: "t123456789"
   };
 
   constructor(private userService: UserService, private tokenStorageService: TokenStorageService, private toastService: ToastService, private router: Router) { }

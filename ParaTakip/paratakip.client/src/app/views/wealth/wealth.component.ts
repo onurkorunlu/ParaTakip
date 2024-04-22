@@ -103,7 +103,7 @@ export class WealthComponent implements OnInit {
 
     this.wealthService.get().subscribe({
       next: (v) => {
-        this.wealth = Object.values(v);
+        this.wealth = v;
       },
       error: (e) => this.toastService.showError(e.message),
       complete: () => console.info('complete')
@@ -112,7 +112,12 @@ export class WealthComponent implements OnInit {
   }
 
   add(wealthType:WealthType, model: any) {
-    (this.wealth.values[wealthType]).push(model);
+    (this.wealth.values[WealthType[wealthType]]).push(model);
+    this.addForeignExchangeForm = <any>{
+      date: formatDate(new Date(), 'yyyy-MM-dd', 'en'),
+      total: 0
+    };
+
   }
 
   addNewForeignExchangeAsset() {
@@ -148,6 +153,22 @@ export class WealthComponent implements OnInit {
 
   calculateProfitRatio(buying:number,amount:number, current:number){
     return (current - buying) * amount / (buying * amount) * 100;
-    
+  }
+
+  save(wealthType:WealthType){
+
+    let model ={
+      wealthType:wealthType,
+      wealthValues: Object.values(this.wealth.values[WealthType[wealthType]])
+    };
+
+    this.wealthService.update(model).subscribe({
+      next: (v) => {
+        this.toastService.showSuccess('Kayıt başarılı');
+      },
+      error: (e) => this.toastService.showError(e.message),
+      complete: () => console.info('complete')
+    })
+
   }
 }

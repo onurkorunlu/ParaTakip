@@ -3,9 +3,6 @@ import { BaseEntity } from './baseEntity';
 
 export interface Wealth extends BaseEntity{
     stringAppUserId:string
-    values : WealthList;
+    values : any;
 }
 
-export type WealthList = {
-    [key in WealthType]: any;
-};

@@ -4,6 +4,8 @@ using ParaTakip.Entities;
 using ParaTakip.Model.RequestModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
+using static ParaTakip.Entities.Wealth;
 
 namespace ParaTakip.Controllers
 {
@@ -13,11 +15,12 @@ namespace ParaTakip.Controllers
     public class WealthController : ParaTakipController
     {
         [HttpGet]
-        public ActionResult<Wealth> Get()
+        public ActionResult Get()
         {
             try
             {
-                return Ok(AppServiceProvider.Instance.Get<IWealthService>().GetByUserId(this.AuthenticatedUserId) ?? new Wealth());
+                var result = AppServiceProvider.Instance.Get<IWealthService>().GetByUserId(this.AuthenticatedUserId);
+                return Ok(result ?? new Wealth());
             }
             catch (AppException e)
             {
@@ -36,15 +39,7 @@ namespace ParaTakip.Controllers
             try
             {
                 CheckModelState(model);
-
-                var userWealth = AppServiceProvider.Instance.Get<IWealthService>().GetByUserId(this.AuthenticatedUserId);
-                if (userWealth == null)
-                {
-                    throw new AppException(ReturnMessages.WEALTH_NOT_FOUND);
-                }
-                userWealth.Values[model.WealthType] = model.WealthValues;
-
-                return Ok(AppServiceProvider.Instance.Get<IWealthService>().Update(userWealth));
+                return Ok(AppServiceProvider.Instance.Get<IWealthService>().Update(model, this.AuthenticatedUserId));
             }
             catch (AppException e)
             {

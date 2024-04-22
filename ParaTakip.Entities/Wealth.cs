@@ -1,6 +1,7 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson;
 using ParaTakip.Entities.Enums;
+using MongoDB.Bson.Serialization.Options;
 
 namespace ParaTakip.Entities
 {
@@ -13,24 +14,35 @@ namespace ParaTakip.Entities
             get { return AppUserId.ToString(); }
         }
 
-        public Dictionary<WealthType, object> Values { get; set; } = new Dictionary<WealthType, object>()
+        [BsonDictionaryOptions(DictionaryRepresentation.ArrayOfArrays)]
+        public Dictionary<WealthType, List<BaseWealthValue>> Values { get; set; } = new Dictionary<WealthType, List<BaseWealthValue>>
         {
-            {WealthType.FOREIGN_EXCHANGE_AND_PRECIOUS_METALS, new List<ForeignExchangeAndPreciousMetals>()},
-            {WealthType.STOCK_TRADING, new List<StockTrading>()},
-            {WealthType.FUND_TRADING, new List<FundTrading>()}
+            {WealthType.FOREIGN_EXCHANGE_AND_PRECIOUS_METALS, new List<BaseWealthValue>() },
+            {WealthType.STOCK_TRADING, new List<BaseWealthValue>() },
+            {WealthType.FUND_TRADING, new List<BaseWealthValue>() }
         };
 
-        public class ForeignExchangeAndPreciousMetals 
+        public class ForeignExchangeAndPreciousMetals : BaseWealthValue
+        {
+            public decimal Amount { get; set; }
+            public decimal Buying { get; set; }
+            public string Currency { get; set; }
+            public DateTime Date { get; set; }
+        }
+
+        public class StockTrading  : BaseWealthValue
         {
 
         }
 
-        public class StockTrading
+        public class FundTrading: BaseWealthValue
         {
 
         }
 
-        public class FundTrading
+        [BsonDiscriminator(RootClass = true)]
+        [BsonKnownTypes(typeof(ForeignExchangeAndPreciousMetals), typeof(StockTrading), typeof(FundTrading))]
+        public class BaseWealthValue
         {
 
         }

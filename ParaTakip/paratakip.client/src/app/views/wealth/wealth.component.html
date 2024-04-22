@@ -16,8 +16,8 @@
                             <th></th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr *ngFor="let item of wealth.values[WealthType.FOREIGN_EXCHANGE_AND_PRECIOUS_METALS]">
+                    <tbody *ngIf="wealth.values">
+                        <tr *ngFor="let item of wealth.values[WealthType[WealthType.FOREIGN_EXCHANGE_AND_PRECIOUS_METALS]]">
                             <td>{{item.currency}}</td><!--Para Birimi-->
                             <td>{{Intl.NumberFormat('tr-TR', {style:'currency', currency:localCurrency}).format(item.buying)}}</td><!--Alış Fiyatı-->
                             <td>{{Intl.NumberFormat('tr-TR', {style:'currency', currency:item.currency}).format(item.amount)}}</td><!--Miktar-->
@@ -39,7 +39,7 @@
             </c-card-body>
             <c-card-footer>
                 <div class="d-grid gap-2">
-                    <button cButton color="success">
+                    <button cButton color="success" (click)="save(WealthType.FOREIGN_EXCHANGE_AND_PRECIOUS_METALS)">
                     <svg cIcon class="me-2" name="cil-save"></svg> Kaydet
                     </button>
                 </div>
