@@ -32,7 +32,10 @@ namespace ParaTakip.Entities
 
         public class StockTrading  : BaseWealthValue
         {
-
+            public string StockCode { get; set; }
+            public decimal Amount { get; set; }
+            public decimal Buying { get; set; }
+            public DateTime Date { get; set; }
         }
 
         public class FundTrading: BaseWealthValue

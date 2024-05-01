@@ -8,6 +8,8 @@ import { ToastService } from 'src/app/services/toast.service';
 import { WealthType } from 'src/app/models/enums/wealthType';
 import { FundService } from 'src/app/services/fund-service';
 import { FundInfo, FundTradingRate } from 'src/app/models/fundTradingRate';
+import { StockService } from 'src/app/services/stock-service';
+import { StockInfo, StockTradingRate } from 'src/app/models/stockTradingRate';
 
 declare interface TableData {
   headerRow: string[];
@@ -20,21 +22,6 @@ declare interface ForeignExchangeAssets {
   amount: number;
 }
 
-declare interface StockMarketAssets {
-  stock: Stock;
-  currency: string;
-  buyingPrice: number;
-  currentPrice: number;
-  amount: number;
-  currentAmount: number;
-  profitAndLoss: number;
-  profitAndLossPercentage: number;
-}
-
-declare interface Stock {
-  symbol: string;
-  symbolDesc: string;
-}
 
 
 @Component({
@@ -53,15 +40,16 @@ export class WealthComponent implements OnInit {
   public foreignExchangeTableRows: string[] | undefined;
 
   public stockMarketAssetsTableRows: string[] | undefined;
-  public stockMarketAssets: StockMarketAssets[] = [];
 
   public fundsTableRows: string[] | undefined;
-  public fundsAssets: ForeignExchangeAssets[] = [];
 
   public ExchangeRateCache: ExchangeRate = <any>[];
   public ExchangeRateList: CurrencyInfo[] = <any>[];
 
   public FundTradingRateCache: FundTradingRate = <any>[];
+
+  public StockTradingRateCache: StockTradingRate = <any>[];
+
 
   wealth:any = <any>{};
   public WealthType = WealthType;
@@ -82,7 +70,7 @@ export class WealthComponent implements OnInit {
     date: formatDate(new Date(), 'yyyy-MM-dd', 'en'),
     total: 0,
     buying:0,
-    symbol:''
+    stockCode:''
   };
 
   public Intl = Intl;
@@ -90,6 +78,7 @@ export class WealthComponent implements OnInit {
     private wealthService:WealthService, 
     private toastService:ToastService,
     private fundService:FundService,
+    private stockService:StockService,
   ) { }
 
   ngOnInit() {
@@ -98,12 +87,6 @@ export class WealthComponent implements OnInit {
     this.foreignExchangeTableRows = ['Para Birimi', 'Alış Fiyatı', 'Miktar', 'Maliyet', 'Güncel Fiyat', 'Güncel Tutar', 'Kar/Zarar', 'Kar/Zarar(%)']
 
     this.fundsTableRows = ['Fon', 'Alış Fiyatı', 'Miktar', 'Maliyet', 'Güncel Fiyat', 'Güncel Tutar', 'Kar/Zarar', 'Kar/Zarar(%)']
-
-    this.stockMarketAssets = [
-      { currency: 'TRY', stock: { symbol: 'KCHOL', symbolDesc: 'Koç Hoding' }, buyingPrice: 88.4, currentPrice: 90, amount: 1000, currentAmount: 90000, profitAndLoss: 1600, profitAndLossPercentage: 2 },
-      { currency: 'TRY', stock: { symbol: 'THY', symbolDesc: 'Türk Hava Yolları' }, buyingPrice: 170, currentPrice: 180, amount: 1000, currentAmount: 160000, profitAndLoss: 10000, profitAndLossPercentage: 6 },
-      { currency: 'TRY', stock: { symbol: 'YKB', symbolDesc: 'Yapı Ve Kredi Bankası' }, buyingPrice: 12, currentPrice: 11, amount: 1000, currentAmount: 12500, profitAndLoss: -500, profitAndLossPercentage: -4 }
-    ];
 
     this.stockMarketAssetsTableRows = ['Sembol', 'Alış Fiyatı', 'Miktar', 'Maliyet', 'Güncel Fiyat', 'Güncel Tutar', 'Kar/Zarar', 'Kar/Zarar(%)'];
     
@@ -121,6 +104,14 @@ export class WealthComponent implements OnInit {
     this.fundService.get().subscribe({
       next: (v) => {
         this.FundTradingRateCache = v;
+      },
+      error: (e) => this.toastService.showError(e.message),
+      complete: () => console.info('complete')
+    })
+
+    this.stockService.get().subscribe({
+      next: (v) => {
+        this.StockTradingRateCache = v;
       },
       error: (e) => this.toastService.showError(e.message),
       complete: () => console.info('complete')
@@ -146,6 +137,10 @@ export class WealthComponent implements OnInit {
     this.getFundBuyingPriceByFundCode(this.addFundsForm.fundCode);
   }
 
+  getStockBuyingPrice(){
+    this.getStockBuyingPriceByStockCode(this.addStockTradeForm.stockCode);
+  }
+
   getFundBuyingPriceByFundCode(fundCode:string){
     this.fundService.getFundValue(fundCode).subscribe({
       next: (v:FundInfo) => {
@@ -162,6 +157,22 @@ export class WealthComponent implements OnInit {
     });
   }
 
+  getStockBuyingPriceByStockCode(stockCode:string){
+    this.stockService.getStockValue(stockCode).subscribe({
+      next: (v:StockInfo) => {
+        if(v.price <=0){
+          this.toastService.showError('Hisse değeri alınamadı');
+        }
+        this.addStockTradeForm.buying = v.price;
+        if (this.StockTradingRateCache[stockCode] == undefined) {
+          this.StockTradingRateCache[stockCode] == v;
+        }
+      },
+      error: (e) => this.toastService.showError(e.message),
+      complete: () => console.info('complete')
+    });
+  }
+
   add(wealthType:WealthType, model: any) {
     (this.wealth.values[WealthType[wealthType]]).push(model);
     this.addForeignExchangeForm = <any>{
@@ -171,7 +182,7 @@ export class WealthComponent implements OnInit {
 
   }
 
-  isStock(object: any): object is Stock {
+  isStock(object: any): object is StockTradingRate {
     if (object.symbol) {
       return true;
     }

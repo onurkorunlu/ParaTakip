@@ -2,26 +2,25 @@
 
 
 using HtmlAgilityPack;
+using ParaTakip.Common;
 using System.Xml;
 
-using (var client = new HttpClient())
-{
-    string url = "https://www.tefas.gov.tr/FonAnaliz.aspx?FonKod=DLY";
-    using HttpResponseMessage httpResponse = client.GetAsync(url).Result;
-    httpResponse.EnsureSuccessStatusCode();
-    string responseBody = httpResponse.Content.ReadAsStringAsync().Result;
-    // Above three lines can be replaced with new helper method below
-    // string responseBody = await client.GetStringAsync(uri);
+string stockCode = "KCHOL";
 
-    var htmlDoc = new HtmlDocument();
-    htmlDoc.LoadHtml(responseBody.ToString());
+string url = "https://www.getmidas.com/canli-borsa/kchol-hisse/";
+HtmlWeb web = new HtmlWeb();
+var htmlDoc = web.Load(url);
 
-    var price = decimal.Parse(htmlDoc.DocumentNode.SelectNodes("//div/ul/li/span")[0].InnerText);
-    var dailyReturn = decimal.Parse(htmlDoc.DocumentNode.SelectNodes("//div/ul/li/span")[1].InnerText.Replace("%",""));
-    var shares = long.Parse(htmlDoc.DocumentNode.SelectNodes("//div/ul/li/span")[2].InnerText.Replace(".",""));
-    var FundTotalValue = decimal.Parse(htmlDoc.DocumentNode.SelectNodes("//div/ul/li/span")[3].InnerText);
-    var category = htmlDoc.DocumentNode.SelectNodes("//div/ul/li/span")[4].InnerText;
-    var name = htmlDoc.DocumentNode.SelectNodes("//div/div/h2/span")[0].InnerText;
+string name = htmlDoc.DocumentNode.SelectNodes("//div/div/h1")[0].InnerText;
+decimal price = decimal.Parse(htmlDoc.DocumentNode.SelectNodes("//p[contains(@class, 'val')]")[0].InnerText.Substring(1));
+decimal volume = decimal.Parse(htmlDoc.DocumentNode.SelectNodes("//p[contains(@class, 'val')]")[1].InnerText.Substring(1));
+decimal dailyDifRatio = decimal.Parse(htmlDoc.DocumentNode.SelectNodes("//span[contains(@class, 'val')]")[2].InnerText.ToDigit());
+decimal dailyDifValue = decimal.Parse(htmlDoc.DocumentNode.SelectNodes("//span[contains(@class, 'val')]")[13].InnerText.Substring(1));
+decimal dailyMinValue = decimal.Parse(htmlDoc.DocumentNode.SelectNodes("//span[contains(@class, 'val')]")[4].InnerText.Substring(1));
+decimal dailyMaxValue = decimal.Parse(htmlDoc.DocumentNode.SelectNodes("//span[contains(@class, 'val')]")[15].InnerText.Substring(1));
+decimal weeklyMinValue = decimal.Parse(htmlDoc.DocumentNode.SelectNodes("//span[contains(@class, 'val')]")[16].InnerText.Substring(1));
+decimal weeklyMaxValue = decimal.Parse(htmlDoc.DocumentNode.SelectNodes("//span[contains(@class, 'val')]")[5].InnerText.Substring(1));
+decimal monthlyMinValue = decimal.Parse(htmlDoc.DocumentNode.SelectNodes("//span[contains(@class, 'val')]")[17].InnerText.Substring(1));
+decimal monthlyMaxValue = decimal.Parse(htmlDoc.DocumentNode.SelectNodes("//span[contains(@class, 'val')]")[6].InnerText.Substring(1));
+decimal startValue = decimal.Parse(htmlDoc.DocumentNode.SelectNodes("//span[contains(@class, 'val')]")[11].InnerText.Substring(1));
 
-    
-}

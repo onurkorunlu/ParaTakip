@@ -343,5 +343,11 @@ namespace ParaTakip.Common
         {
             return val.Replace(".", "*").Replace(",", ".").Replace("*", ",");
         }
+
+        public static string ToDigit(this string val)
+        {
+            return Regex.Match(val, @"\d+.+\d").Value;
+
+        }
     }
 }
