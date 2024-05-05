@@ -1,13 +1,15 @@
 export interface ExchangeRate {
-    [key: string]: CurrencyInfo ;
+    [key: string]: ExchangeRateInfo ;
   }
   
-  export interface CurrencyInfo {
-    name: string
-    currencyCode: string
-    currencyCodeDigit: string
-    unit: number
-    buying: number
-    lastUpdateDate: Date
+  export interface ExchangeRateInfo {
+    currencyCode:string;
+    name:string;
+    buying:number;
+    selling:number;
+    minValue:number;
+    maxValue:number;
+    change:number;
+    time:string;
   }
   

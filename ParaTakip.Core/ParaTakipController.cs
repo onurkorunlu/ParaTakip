@@ -115,6 +115,17 @@ namespace ParaTakip.Core
             return MyJsonResult.Error(definedException.Message, data, string.Empty, showNotification);
         }
 
+        protected string GetUserName(ApplicationContext Context)
+        {
+            if (Context != null && Context.Current != null && Context.Current.HttpContext != null && Context.Current.HttpContext.User != null && Context.Current.HttpContext.User.Identity != null && Context.Current.HttpContext.User.Identity.IsAuthenticated)
+            {
+                return Context.Current.HttpContext.User.Claims.First(x => x.Type == ClaimTypes.Name).Value;
+            }
+
+            return "BATCH";
+        }
+
+
         #endregion
     }
 }

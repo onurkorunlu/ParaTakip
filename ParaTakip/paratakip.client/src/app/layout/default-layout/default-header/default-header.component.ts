@@ -77,8 +77,8 @@ export class DefaultHeaderComponent extends HeaderComponent {
   readonly colorMode = this.#colorModeService.colorMode;
   readonly #destroyRef: DestroyRef = inject(DestroyRef);
   public ExchangeRateCache: ExchangeRate | null = null;
-  public HeaderGolds:string[] = ['XAU'];
-  public HeaderCurrencies:string[] = ['USD', 'EUR','GBP','CHF'];
+  public HeaderGolds:string[] = ['GRAM_ALTIN','ÇEYREK_ALTIN','YARIM_ALTIN','TAM_ALTIN','ATA_ALTIN'];
+  public HeaderCurrencies:string[] = ['USD', 'EUR'];
   constructor(public exchangeRateService: ExchangeRateService,private tokenStorageService: TokenStorageService) {
     super();
     this.#colorModeService.localStorageItemName.set('coreui-free-angular-admin-template-theme-default');

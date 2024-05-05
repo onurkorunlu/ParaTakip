@@ -1,8 +1,12 @@
 import { WealthType } from '../enums/wealthType';
 import { BaseEntity } from './baseEntity';
 
-export interface Wealth extends BaseEntity{
-    stringAppUserId:string
+export class Wealth extends BaseEntity{
     values : any;
+
+    constructor(){
+        super();
+        this.values = [];
+    }
 }
 

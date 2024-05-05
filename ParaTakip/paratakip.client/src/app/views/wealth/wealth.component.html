@@ -1,3 +1,4 @@
+<div *ngIf="wealth">
 <c-row ngPreserveWhitespaces>
     <c-col xs="12" md="6">
         <c-card class="mb-4">
@@ -38,6 +39,10 @@
            
             </c-card-body>
             <c-card-footer>
+                <table cTable [responsive]="true" [striped]="true" *ngIf="ExchangeRateCache">
+                    <td>Toplam Kar/Zarar : {{Intl.NumberFormat('tr-TR', {style:'currency', currency:localCurrency}).format(getProfitSum(WealthType.FOREIGN_EXCHANGE_AND_PRECIOUS_METALS))}}</td>
+                    <td>Toplam Tutar : {{Intl.NumberFormat('tr-TR', {style:'currency', currency:localCurrency}).format(getSum(WealthType.FOREIGN_EXCHANGE_AND_PRECIOUS_METALS))}}</td>
+                </table>
                 <div class="d-grid gap-2">
                     <button cButton color="success" (click)="save(WealthType.FOREIGN_EXCHANGE_AND_PRECIOUS_METALS)">
                     <svg cIcon class="me-2" name="cil-save"></svg> Kaydet
@@ -101,6 +106,10 @@
                 </table>
             </c-card-body>
             <c-card-footer>
+                <table cTable [responsive]="true" [striped]="true" *ngIf="wealth.values[WealthType[WealthType.STOCK_TRADING]]">
+                    <td>Toplam Kar/Zarar : {{Intl.NumberFormat('tr-TR', {style:'currency', currency:localCurrency}).format(getProfitSum(WealthType.STOCK_TRADING))}}</td>
+                    <td>Toplam Tutar : {{Intl.NumberFormat('tr-TR', {style:'currency', currency:localCurrency}).format(getSum(WealthType.STOCK_TRADING))}}</td>
+                </table>
                 <div class="d-grid gap-2">
                     <button cButton color="success" (click)="save(WealthType.STOCK_TRADING)">
                     <svg cIcon class="me-2" name="cil-save"></svg> Kaydet
@@ -160,6 +169,10 @@
                 </table>
             </c-card-body>
             <c-card-footer>
+                <table cTable [responsive]="true" [striped]="true" *ngIf="ExchangeRateCache">
+                    <td>Toplam Kar/Zarar : {{Intl.NumberFormat('tr-TR', {style:'currency', currency:localCurrency}).format(getProfitSum(WealthType.FUND_TRADING))}}</td>
+                    <td>Toplam Tutar : {{Intl.NumberFormat('tr-TR', {style:'currency', currency:localCurrency}).format(getSum(WealthType.FUND_TRADING))}}</td>
+                </table>
                 <div class="d-grid gap-2">
                     <button cButton color="success" (click)="save(WealthType.FUND_TRADING)">
                     <svg cIcon class="me-2" name="cil-save"></svg> Kaydet
@@ -355,3 +368,9 @@
         <button cButton color="primary" (click)="add(WealthType.FUND_TRADING, addFundsForm)" [disabled]="addFundsForm.buying<=0">Ekle</button>
     </c-modal-footer>
 </c-modal> 
+
+
+<c-alert color="dark" variant="solid">
+    Genel Toplam : {{Intl.NumberFormat('tr-TR', {style:'currency', currency:localCurrency}).format(getSum(WealthType.FOREIGN_EXCHANGE_AND_PRECIOUS_METALS) + getSum(WealthType.STOCK_TRADING) + getSum(WealthType.FUND_TRADING))}}
+  </c-alert>
+</div>

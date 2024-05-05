@@ -19,6 +19,11 @@ namespace ParaTakip.Business.Caches
             }
         }
 
+        public void Reset()
+        {
+            Instance.Reset();
+        }
+
         public override StockInfo GetCacheValue(string code)
         {
             try

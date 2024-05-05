@@ -37,7 +37,7 @@
     </c-header-nav>
 
     <c-header-nav class="d-none d-md-flex ms-auto " *ngIf="ExchangeRateCache">
-      <c-badge color="info">Son Güncelleme : {{ExchangeRateCache["USD"].lastUpdateDate | date:'dd.MM.yyyy HH:mm'}}</c-badge>
+      <c-badge size="sm" color="info">Son Güncelleme : {{ExchangeRateCache["USD"].time}}</c-badge>
     </c-header-nav>
 
     <c-header-nav class="ms-auto ms-md-0">

@@ -15,7 +15,7 @@ namespace ParaTakip.Entities
             get { return RecordId.ToString(); }
         }
 
-        private DateTime _RecordCreateDate {  get; set; }
+        private DateTime _RecordCreateDate { get; set; } = DateTime.Now;
 
         [Required]
         [DisplayName("Kayıt Tarihi")]

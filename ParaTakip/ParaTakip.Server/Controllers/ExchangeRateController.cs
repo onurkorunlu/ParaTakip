@@ -15,7 +15,7 @@ namespace ParaTakip.Controllers
     {
 
         [HttpGet]
-        public ActionResult<Dictionary<string, CurrencyInfo>> Get()
+        public ActionResult<Dictionary<string, ExchangeRateInfo>> Get()
         {
             try
             {
@@ -33,7 +33,7 @@ namespace ParaTakip.Controllers
         }
 
         [HttpGet]
-        public ActionResult<Dictionary<string, CurrencyInfo>> Load(DateTime? date=null)
+        public ActionResult<Dictionary<string, ExchangeRateInfo>> Load(DateTime? date=null)
         {
             try
             {
@@ -51,5 +51,25 @@ namespace ParaTakip.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+        [HttpGet]
+        public ActionResult Clear()
+        {
+            try
+            {
+                ExchangeRateCache.Instance.Reset();
+                return Ok("Cache reloaded.");
+            }
+            catch (AppException e)
+            {
+                return BadRequest(e.Message);
+            }
+            catch (Exception ex)
+            {
+                var e = new AppException(ReturnMessages.GENERIC_ERROR, ex);
+                return BadRequest(e.Message);
+            }
+        }
+
     }
 }

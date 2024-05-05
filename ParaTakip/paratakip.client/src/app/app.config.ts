@@ -1,5 +1,5 @@
 import { ApplicationConfig as AppModule, importProvidersFrom } from '@angular/core';
-import { provideAnimations } from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule, provideAnimations } from '@angular/platform-browser/animations';
 import { LoginGuard } from './helpers/login-guard';
 import { HttpService } from './services/http.service';
 import { HttpConfigInterceptor } from './helpers/httpInterceptor';
@@ -22,6 +22,10 @@ import { BrowserModule } from '@angular/platform-browser';
 import { CurrencyService } from './services/currency-service';
 import { ToastrModule, ToastrService } from 'ngx-toastr';
 import { ToastService } from './services/toast.service';
+import { CreditCardDirectivesModule } from 'angular-cc-library';
+import { IgxMaskModule, IgxInputGroupModule, IgxIconModule } from 'igniteui-angular';
+import { CalendarModule, DateAdapter } from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 
 export const appConfig: AppModule = {
   providers: [
@@ -40,7 +44,7 @@ export const appConfig: AppModule = {
       withViewTransitions(),
       withHashLocation()
     ),
-    importProvidersFrom(SidebarModule, DropdownModule, BrowserModule, HttpClientModule),
+    importProvidersFrom(SidebarModule, DropdownModule, BrowserModule, HttpClientModule, CreditCardDirectivesModule,BrowserAnimationsModule),
     IconSetService,
     HttpService,
     CurrencyService,
@@ -48,7 +52,12 @@ export const appConfig: AppModule = {
     LoginGuard,
     ToastService,
     ToastrService,
-    importProvidersFrom(ToastrModule.forRoot())
+    importProvidersFrom(ToastrModule.forRoot()),
+    importProvidersFrom(IgxMaskModule,IgxInputGroupModule,IgxIconModule),
+    importProvidersFrom(CalendarModule.forRoot({
+      provide: DateAdapter,
+      useFactory: adapterFactory,
+    }))
   ]
 };
 

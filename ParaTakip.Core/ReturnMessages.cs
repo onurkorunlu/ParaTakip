@@ -71,6 +71,7 @@
 
         public const string USERNAME_ALREADY_EXISTS = "Kullanıcı adı zaten mevcut.";
         public const string EMAILADDRESS_ALREADY_EXISTS = "E-Posta adresi zaten mevcut.";
+        public const string CREDIT_CARD_NUMBER_ALREADY_EXISTS = "Kredi kartı zaten mevcut.";
         #endregion
 
     }

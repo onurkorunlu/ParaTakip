@@ -30,10 +30,10 @@ namespace ParaTakip.Business.Helpers
                 var htmlDoc = new HtmlDocument();
                 htmlDoc.LoadHtml(responseBody.ToString());
 
-                decimal price = decimal.Parse(htmlDoc.DocumentNode.SelectNodes("//div/ul/li/span")[0].InnerText.ToUniDecimal());
-                decimal dailyReturn = decimal.Parse(htmlDoc.DocumentNode.SelectNodes("//div/ul/li/span")[1].InnerText.Replace("%", "").ToUniDecimal());
-                long shares = long.Parse(htmlDoc.DocumentNode.SelectNodes("//div/ul/li/span")[2].InnerText.Replace(".", "").ToUniDecimal());
-                decimal fundTotalValue = decimal.Parse(htmlDoc.DocumentNode.SelectNodes("//div/ul/li/span")[3].InnerText.ToUniDecimal());
+                decimal price = decimal.Parse(htmlDoc.DocumentNode.SelectNodes("//div/ul/li/span")[0].InnerText);
+                decimal dailyReturn = decimal.Parse(htmlDoc.DocumentNode.SelectNodes("//div/ul/li/span")[1].InnerText.Replace("%", ""));
+                long shares = long.Parse(htmlDoc.DocumentNode.SelectNodes("//div/ul/li/span")[2].InnerText.Replace(".", ""));
+                decimal fundTotalValue = decimal.Parse(htmlDoc.DocumentNode.SelectNodes("//div/ul/li/span")[3].InnerText);
                 string category = htmlDoc.DocumentNode.SelectNodes("//div/ul/li/span")[4].InnerText;
                 string name = htmlDoc.DocumentNode.SelectNodes("//div/div/h2/span")[0].InnerText;
 

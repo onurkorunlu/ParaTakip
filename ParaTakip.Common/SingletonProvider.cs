@@ -45,5 +45,13 @@ namespace ParaTakip.Common
                 return _instance;
             }
         }
+
+        public static void Reset()
+        {
+            lock (_lock)
+            {
+                _instance = null;
+            }
+        }
     }
 }

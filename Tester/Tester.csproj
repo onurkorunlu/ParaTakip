@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ParaTakip.Common\ParaTakip.Common.csproj" />
+    <ProjectReference Include="..\ParaTakip.Entities\ParaTakip.Entities.csproj" />
   </ItemGroup>
 
 </Project>

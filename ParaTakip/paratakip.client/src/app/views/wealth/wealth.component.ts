@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonProviders } from 'src/app/helpers/commonProviders';
-import { CurrencyInfo, ExchangeRate } from 'src/app/models/exchangeRate';
+import { ExchangeRateInfo, ExchangeRate } from 'src/app/models/exchangeRate';
 import { ExchangeRateService } from 'src/app/services/exchange-rate-service';
 import { formatDate } from '@angular/common';
 import { WealthService } from 'src/app/services/wealth-service';
@@ -10,6 +10,8 @@ import { FundService } from 'src/app/services/fund-service';
 import { FundInfo, FundTradingRate } from 'src/app/models/fundTradingRate';
 import { StockService } from 'src/app/services/stock-service';
 import { StockInfo, StockTradingRate } from 'src/app/models/stockTradingRate';
+import { AlertComponent } from '@coreui/angular';
+import { Wealth } from 'src/app/models/entities/wealth';
 
 declare interface TableData {
   headerRow: string[];
@@ -29,7 +31,7 @@ declare interface ForeignExchangeAssets {
   templateUrl: 'wealth.component.html',
   styleUrls: ['wealth.component.scss'],
   standalone: true,
-  imports: [CommonProviders.Set()],
+  imports: [CommonProviders.Set(), AlertComponent ],
 })
 
 export class WealthComponent implements OnInit {
@@ -44,14 +46,14 @@ export class WealthComponent implements OnInit {
   public fundsTableRows: string[] | undefined;
 
   public ExchangeRateCache: ExchangeRate = <any>[];
-  public ExchangeRateList: CurrencyInfo[] = <any>[];
+  public ExchangeRateList: ExchangeRateInfo[] = <any>[];
 
   public FundTradingRateCache: FundTradingRate = <any>[];
 
   public StockTradingRateCache: StockTradingRate = <any>[];
 
 
-  wealth:any = <any>{};
+  wealth:Wealth = <Wealth>{};
   public WealthType = WealthType;
 
   public addForeignExchangeForm = <any>{
@@ -126,6 +128,10 @@ export class WealthComponent implements OnInit {
           this.getFundBuyingPriceByFundCode(element.fundCode);
         });
 
+        this.wealth.values[WealthType[WealthType.STOCK_TRADING]].forEach((element: { stockCode: any; }) => {
+          this.getStockBuyingPriceByStockCode(element.stockCode);
+        });
+
       },
       error: (e) => this.toastService.showError(e.message),
       complete: () => console.info('complete')
@@ -149,7 +155,7 @@ export class WealthComponent implements OnInit {
         }
         this.addFundsForm.buying = v.price;
         if (this.FundTradingRateCache[fundCode] == undefined) {
-          this.FundTradingRateCache[fundCode] == v;
+          this.FundTradingRateCache[fundCode] = v;
         }
       },
       error: (e) => this.toastService.showError(e.message),
@@ -165,7 +171,7 @@ export class WealthComponent implements OnInit {
         }
         this.addStockTradeForm.buying = v.price;
         if (this.StockTradingRateCache[stockCode] == undefined) {
-          this.StockTradingRateCache[stockCode] == v;
+          this.StockTradingRateCache[stockCode] = v;
         }
       },
       error: (e) => this.toastService.showError(e.message),
@@ -230,5 +236,37 @@ export class WealthComponent implements OnInit {
     this.wealth.values[WealthType[wealthType]] = this.wealth.values[WealthType[wealthType]].filter((v:any) => v !== item);
   }
 
+  getSum(wealthType:WealthType){
+    let sum = 0;
+    this.wealth.values[WealthType[wealthType]].forEach((element: any) => {
+      sum += element.buying * element.amount;
+    });
+    return sum;
+  }
 
+  getProfitSum(wealthType:WealthType){
+
+    let sum = 0;
+    
+    switch (wealthType) {
+      case WealthType.FOREIGN_EXCHANGE_AND_PRECIOUS_METALS:
+        this.wealth.values[WealthType[wealthType]].forEach((element: any) => {
+          sum += this.calculateProfit(element.buying,element.amount, this.ExchangeRateCache[element.currency].buying);
+        });
+        break;
+        case WealthType.FUND_TRADING:
+        this.wealth.values[WealthType[wealthType]].forEach((element: any) => {
+          sum += this.calculateProfit(element.buying,element.amount, this.FundTradingRateCache[element.fundCode].price);
+        });
+        break;
+        case WealthType.STOCK_TRADING:
+        this.wealth.values[WealthType[wealthType]].forEach((element: any) => {
+          sum += this.calculateProfit(element.buying,element.amount, this.StockTradingRateCache[element.stockCode].price);
+        });
+        break;
+      default:
+        break;
+    }
+    return sum;
+  }
 }

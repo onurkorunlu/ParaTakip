@@ -349,5 +349,12 @@ namespace ParaTakip.Common
             return Regex.Match(val, @"\d+.+\d").Value;
 
         }
+
+        public static string ToMaskedCardNumber(this string val)
+        {
+            return val.Substring(0,4) + " " + val.Substring(4,2) + "XX" + " XXXX " + val.Substring(6,4);
+
+        }
+
     }
 }

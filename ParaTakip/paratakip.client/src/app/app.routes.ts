@@ -25,6 +25,10 @@ export const routes: Routes = [
         loadChildren: () => import('./views/wealth/routes').then((m) => m.routes)
       },
       {
+        path: 'credit-card',
+        loadChildren: () => import('./views/credit-card/routes').then((m) => m.routes)
+      },
+      {
         path: 'theme',
         loadChildren: () => import('./views/theme/routes').then((m) => m.routes)
       },

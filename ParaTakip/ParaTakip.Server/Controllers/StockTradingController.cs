@@ -44,5 +44,25 @@ namespace ParaTakip.Server.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+        [HttpGet]
+        public ActionResult Clear()
+        {
+            try
+            {
+                StockInfoCache.Instance.Reset();
+                return Ok("Cache reloaded.");
+            }
+            catch (AppException e)
+            {
+                return BadRequest(e.Message);
+            }
+            catch (Exception ex)
+            {
+                var e = new AppException(ReturnMessages.GENERIC_ERROR, ex);
+                return BadRequest(e.Message);
+            }
+        }
+
     }
 }

@@ -15,7 +15,7 @@ export class WealthService {
     return this.httpService.get<any>("wealth/get");
   }
 
-  update(model:any): Observable<Wealth[]> {
-    return this.httpService.post<Wealth[]>("wealth/update", model);
+  update(model:any): Observable<Wealth> {
+    return this.httpService.post<Wealth>("wealth/update", model);
   }
 }

@@ -1,4 +1,6 @@
-﻿using ParaTakip.Business.Interfaces;
+﻿using Amazon.Runtime.Internal.Transform;
+using ParaTakip.Business.Helpers;
+using ParaTakip.Business.Interfaces;
 using ParaTakip.Common;
 using ParaTakip.Core;
 using ParaTakip.Entities;
@@ -8,7 +10,7 @@ using static ParaTakip.Entities.ExchangeRate;
 
 namespace ParaTakip.Business.Caches
 {
-    public class ExchangeRateCache : CacheBase<CurrencyInfo>
+    public class ExchangeRateCache : CacheBase<ExchangeRateInfo>
     {
         public ExchangeRateCache(): base("ExchangeRateCache")
         {
@@ -22,9 +24,14 @@ namespace ParaTakip.Business.Caches
             }
         }
 
-        protected override Dictionary<string, CurrencyInfo> GetPrepareCacheDictionary()
+        public void Reset()
         {
-            Dictionary<string,CurrencyInfo> dictonary = [];
+            Instance.Reset();
+        }
+
+        protected override Dictionary<string, ExchangeRateInfo> GetPrepareCacheDictionary()
+        {
+            Dictionary<string, ExchangeRateInfo> dictonary = [];
 
             ExchangeRate? rates = AppServiceProvider.Instance.Get<IExchangeRateService>().GetLast();
             if (rates == null)
@@ -32,17 +39,7 @@ namespace ParaTakip.Business.Caches
                 return dictonary;
             }
 
-            if (rates.Date != DateTime.Now.Date)
-            {
-                
-            }
-
-            foreach (var rate in rates.CurrencyDictionary)
-            {
-                rate.Value.Name = CurrencyCache.Instance.Values[rate.Key].NAME;
-                rate.Value.CurrencyCodeDigit = CurrencyCache.Instance.Values[rate.Key].CURRENCY_CODE;
-                dictonary.Add(rate.Key, rate.Value);
-            }
+            dictonary = rates.CurrencyDictionary;
 
             return dictonary;
         }

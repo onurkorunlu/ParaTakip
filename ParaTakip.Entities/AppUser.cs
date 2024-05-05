@@ -23,7 +23,16 @@ namespace ParaTakip.Entities
 
         public Dictionary<PreferencesType, object> Preferences { get; set; } = new Dictionary<PreferencesType, object>();
 
-        
+        public List<CreditCard> CreditCards { get; set; } = new List<CreditCard>();
+
+        public class CreditCard: MongoBaseEntity
+        {
+            public string MaskedCardNumber { get; set; }
+            public short StatementDay { get; set; }
+            public short LastPaymentDay { get; set;}
+        }
+
     }
+
 
 }
