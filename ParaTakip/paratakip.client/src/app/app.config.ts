@@ -17,7 +17,7 @@ import { DropdownModule, SidebarModule } from '@coreui/angular';
 import { IconSetService } from '@coreui/icons-angular';
 import { routes } from './app.routes';
 import { HTTP_INTERCEPTORS, HttpClientModule, provideHttpClient } from '@angular/common/http';
-import { NgFor } from '@angular/common';
+import { CommonModule, NgFor } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { CurrencyService } from './services/currency-service';
 import { ToastrModule, ToastrService } from 'ngx-toastr';
@@ -26,6 +26,9 @@ import { CreditCardDirectivesModule } from 'angular-cc-library';
 import { IgxMaskModule, IgxInputGroupModule, IgxIconModule } from 'igniteui-angular';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { FlatpickrModule } from 'angularx-flatpickr';
+import { FormsModule } from '@angular/forms';
+import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 
 export const appConfig: AppModule = {
   providers: [
@@ -44,7 +47,7 @@ export const appConfig: AppModule = {
       withViewTransitions(),
       withHashLocation()
     ),
-    importProvidersFrom(SidebarModule, DropdownModule, BrowserModule, HttpClientModule, CreditCardDirectivesModule,BrowserAnimationsModule),
+    importProvidersFrom(CommonModule, FormsModule, NgbModalModule,SidebarModule, DropdownModule, BrowserModule, HttpClientModule, CreditCardDirectivesModule,BrowserAnimationsModule),
     IconSetService,
     HttpService,
     CurrencyService,
@@ -57,7 +60,8 @@ export const appConfig: AppModule = {
     importProvidersFrom(CalendarModule.forRoot({
       provide: DateAdapter,
       useFactory: adapterFactory,
-    }))
+    })),
+    importProvidersFrom(FlatpickrModule.forRoot())
   ]
 };
 
