@@ -285,5 +285,35 @@ namespace ParaTakip.Business.Services
         {
             return new Dictionary<PreferencesType, object>();
         }
+
+        public List<GetEventsResponseModel> GetCreditCardEvents(string authenticatedUserId, DateTime date)
+        {
+            List<GetEventsResponseModel> result = new List<GetEventsResponseModel>();
+            var user = this.GetById(authenticatedUserId);
+            foreach (var creditCard in user.CreditCards)
+            {
+                result.Add(new GetEventsResponseModel
+                {
+                    EventType = EventType.CreditCardStatement,
+                    StartDate = new DateTime(date.Year, date.Month, creditCard.StatementDay),
+                    EndDate = new DateTime(date.Year, date.Month, creditCard.StatementDay),
+                    AllDay = true,
+                    EventData = creditCard,
+                    Title = $"{creditCard.BankName} - {creditCard.MaskedCardNumber} nolu kredi kartýnýn ekstre kesim tarihi."
+                });
+
+                result.Add(new GetEventsResponseModel
+                {
+                    EventType = EventType.CreditCardStatementLastPayment,
+                    StartDate = new DateTime(date.Year, date.Month, creditCard.LastPaymentDay),
+                    EndDate = new DateTime(date.Year, date.Month, creditCard.LastPaymentDay),
+                    AllDay = true,
+                    EventData = creditCard,
+                    Title = $"{creditCard.BankName} - {creditCard.MaskedCardNumber} nolu kredi kartýnýn ekstre son ödeme tarihi."
+                });
+            }
+
+            return result;
+        }
     }
 }

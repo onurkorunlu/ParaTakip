@@ -17,7 +17,7 @@ import { DropdownModule, SidebarModule } from '@coreui/angular';
 import { IconSetService } from '@coreui/icons-angular';
 import { routes } from './app.routes';
 import { HTTP_INTERCEPTORS, HttpClientModule, provideHttpClient } from '@angular/common/http';
-import { CommonModule, NgFor } from '@angular/common';
+import { CommonModule, NgFor, registerLocaleData } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { CurrencyService } from './services/currency-service';
 import { ToastrModule, ToastrService } from 'ngx-toastr';
@@ -29,9 +29,13 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { FlatpickrModule } from 'angularx-flatpickr';
 import { FormsModule } from '@angular/forms';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+import { LOCALE_ID } from '@angular/core';
+import localTr from '@angular/common/locales/tr';
+registerLocaleData(localTr);
 
 export const appConfig: AppModule = {
   providers: [
+    { provide: LOCALE_ID, useValue: "tr-TR" }, //replace "en-US" with your locale
     { provide: 'BASE_URL', useFactory: getBaseUrl, deps: [] },
     { provide: HTTP_INTERCEPTORS, useClass: HttpConfigInterceptor, multi: true },
     provideHttpClient(),

@@ -14,5 +14,6 @@ namespace ParaTakip.Business.Interfaces
         LoginResultModel TokenBasedLogin(LoginServiceRequestModel model);
         AppUser? GetByUserName(string userName);
         RegisterResultModel Register(RegisterServiceRequestModel requestModel);
+        List<GetEventsResponseModel> GetCreditCardEvents(string authenticatedUserId, DateTime date);
     }
 }

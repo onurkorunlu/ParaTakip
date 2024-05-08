@@ -6,31 +6,31 @@
         <div class="btn-group">
           <div class="btn btn-primary" mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate"
             (viewDateChange)="closeOpenMonthViewDay()">
-            Previous
+            Geçen Ay
           </div>
           <div class="btn btn-outline-secondary" mwlCalendarToday [(viewDate)]="viewDate">
-            Today
+            Bu Ay
           </div>
           <div class="btn btn-primary" mwlCalendarNextView [view]="view" [(viewDate)]="viewDate"
             (viewDateChange)="closeOpenMonthViewDay()">
-            Next
+            Sonraki Ay
           </div>
         </div>
       </div>
       <div class="col-md-4">
-        <h3>{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h3>
+        <h3>{{ viewDate | calendarDate:(view + 'ViewTitle'):'tr' }}</h3>
       </div>
       <div class="col-md-4">
         <div class="btn-group">
           <div class="btn btn-primary" (click)="setView(CalendarView.Month)"
             [class.active]="view === CalendarView.Month">
-            Month
+            Ay
           </div>
           <div class="btn btn-primary" (click)="setView(CalendarView.Week)" [class.active]="view === CalendarView.Week">
-            Week
+            Hafta
           </div>
           <div class="btn btn-primary" (click)="setView(CalendarView.Day)" [class.active]="view === CalendarView.Day">
-            Day
+            Gün
           </div>
         </div>
       </div>
@@ -39,15 +39,13 @@
     <div [ngSwitch]="view">
       <mwl-calendar-month-view *ngSwitchCase="CalendarView.Month" [viewDate]="viewDate" [events]="events"
         [refresh]="refresh" [activeDayIsOpen]="activeDayIsOpen" (dayClicked)="dayClicked($event.day)"
-        (eventClicked)="handleEvent('Clicked', $event.event)" (eventTimesChanged)="eventTimesChanged($event)">
+        (eventClicked)="handleEvent('Clicked', $event.event)">
       </mwl-calendar-month-view>
       <mwl-calendar-week-view *ngSwitchCase="CalendarView.Week" [viewDate]="viewDate" [events]="events"
-        [refresh]="refresh" (eventClicked)="handleEvent('Clicked', $event.event)"
-        (eventTimesChanged)="eventTimesChanged($event)">
+        [refresh]="refresh" (eventClicked)="handleEvent('Clicked', $event.event)">
       </mwl-calendar-week-view>
       <mwl-calendar-day-view *ngSwitchCase="CalendarView.Day" [viewDate]="viewDate" [events]="events"
-        [refresh]="refresh" (eventClicked)="handleEvent('Clicked', $event.event)"
-        (eventTimesChanged)="eventTimesChanged($event)">
+        [refresh]="refresh" (eventClicked)="handleEvent('Clicked', $event.event)">
       </mwl-calendar-day-view>
     </div>
 
@@ -55,28 +53,26 @@
 
 
 
-    <ng-template #modalContent let-close="close">
+    <ng-template #cardModalContent let-close="close">
       <div class="modal-header">
-        <h5 class="modal-title">Event action occurred</h5>
-        <button type="button" class="close" (click)="close()">
-          <span aria-hidden="true">&times;</span>
-        </button>
+        <h5 class="modal-title">
+          <img *ngIf="getCreditCardType((modalData?.event?.eventData?.maskedCardNumber))!='unknown'"
+            src="./assets/card-brands/{{getCreditCardType(modalData?.event?.eventData?.maskedCardNumber)}}.svg"
+            width="50">
+          <label>{{modalData?.event?.eventData?.bankName}}</label>
+        </h5>
       </div>
       <div class="modal-body">
-        <div>
-          Action:
-          <pre>{{ modalData?.action }}</pre>
-        </div>
-        <div>
-          Event:
-          <pre>{{ modalData?.event | json }}</pre>
-        </div>
+        <p>Kart No : {{modalData?.event?.eventData?.maskedCardNumber}}</p>
+        <p>Ekstre Tarihi : {{getDate(modalData?.event?.eventData?.statementDay) | date:'dd MMMM, EEEE'}}</p>
+        <p>Son Ödeme Tarihi : {{getDate(modalData?.event?.eventData?.lastPaymentDay) | date:'dd MMMM, EEEE'}}</p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-outline-secondary" (click)="close()">
-          OK
+          Kapat
         </button>
       </div>
     </ng-template>
+
   </c-card-body>
 </c-card>

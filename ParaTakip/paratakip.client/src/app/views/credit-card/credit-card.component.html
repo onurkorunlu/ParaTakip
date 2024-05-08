@@ -7,7 +7,7 @@
             <c-card-body>
                 <form cForm>
                     <c-row>
-                        <c-col [md]="12">
+                        <c-col [md]="6">
                             <img *ngIf="getCreditCardType(form.maskedCardNumber)!='unknown'"
                                 src="./assets/card-brands/{{getCreditCardType(form.maskedCardNumber)}}.svg" width="50">
                             <label>Kart Numarası</label>
@@ -16,7 +16,14 @@
                                     [(ngModel)]="form.maskedCardNumber" [ngModelOptions]="{standalone: true}" />
                             </igx-input-group>
                         </c-col>
-                    </c-row><c-row>
+                        <c-col [md]="6">
+                            <label>Banka</label>
+                            <select  cSelect [(ngModel)]="form.bankName" [ngModelOptions]="{standalone: true}">
+                                <option *ngFor="let bank of bankList" [value]="bank">{{bank}}</option>
+                            </select>
+                        </c-col>
+                    </c-row>
+                    <c-row>
                         <c-col [md]="6">
                             <label>Ekstre Günü</label>
                             <input type="number" cFormControl [(ngModel)]="form.statementDay"
@@ -30,7 +37,8 @@
                     </c-row>
                     <c-row>
                         <c-col>
-                            <button cButton="primary" (click)="saveCreditCard()" [disabled]="!form.isValid()">Kaydet</button>
+                            <button cButton="primary" (click)="saveCreditCard()"
+                                [disabled]="!form.isValid()">Kaydet</button>
                         </c-col>
                     </c-row>
                 </form>
@@ -54,7 +62,9 @@
                     <tbody *ngIf="cardList">
                         <tr *ngFor="let card of cardList">
                             <td><img *ngIf="getCreditCardType(card.maskedCardNumber)!='unknown'"
-                                src="./assets/card-brands/{{getCreditCardType(card.maskedCardNumber)}}.svg" width="50"></td>
+                                    src="./assets/card-brands/{{getCreditCardType(card.maskedCardNumber)}}.svg"
+                                    width="50"></td>
+                            <td>{{card.bankName}}</td>
                             <td>{{card.maskedCardNumber}}</td>
                             <td>{{card.statementDay}}</td>
                             <td>{{card.lastPaymentDay}}</td>

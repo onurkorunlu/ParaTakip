@@ -1,20 +1,20 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import {
-  AvatarComponent,
-  ButtonDirective,
-  ButtonGroupComponent,
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  ColComponent,
-  FormCheckLabelDirective,
-  GutterDirective,
-  ProgressBarDirective,
-  ProgressComponent,
-  RowComponent,
-  TableDirective,
-  TextColorDirective,
+    AvatarComponent,
+    ButtonDirective,
+    ButtonGroupComponent,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    ColComponent,
+    FormCheckLabelDirective,
+    GutterDirective,
+    ProgressBarDirective,
+    ProgressComponent,
+    RowComponent,
+    TableDirective,
+    TextColorDirective,
 } from '@coreui/angular';
 import { ChartjsComponent } from '@coreui/angular-chartjs';
 import { IconDirective } from '@coreui/icons-angular';
@@ -30,193 +30,153 @@ import { Subject } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { FlatpickrModule } from 'angularx-flatpickr';
 import { EventColor } from 'calendar-utils';
+import { CalendarService } from 'src/app/services/calendar-service';
+import { AppCalendarEvent, AppEventType } from 'src/app/models/entities/calendarEvents';
+import { ToastService } from 'src/app/services/toast.service';
+import { EventType } from '@angular/router';
 
 const colors: Record<string, EventColor> = {
-  red: {
-      primary: '#ad2121',
-      secondary: '#FAE3E3',
-  },
-  blue: {
-      primary: '#1e90ff',
-      secondary: '#D1E8FF',
-  },
-  yellow: {
-      primary: '#e3bc08',
-      secondary: '#FDF1BA',
-  },
+    red: {
+        primary: '#ad2121',
+        secondary: '#FAE3E3',
+    },
+    blue: {
+        primary: '#1e90ff',
+        secondary: '#D1E8FF',
+    },
+    yellow: {
+        primary: '#e3bc08',
+        secondary: '#FDF1BA',
+    },
 };
 
 @Component({
-  templateUrl: 'dashboard.component.html',
-  styleUrls: ['dashboard.component.scss'],
-  standalone: true,
-  imports: [WidgetsDropdownComponent, TextColorDirective, CardComponent, CardBodyComponent, RowComponent, ColComponent, ButtonDirective, IconDirective, ButtonGroupComponent, FormCheckLabelDirective, ChartjsComponent, CardFooterComponent, GutterDirective, ProgressBarDirective, ProgressComponent, WidgetsBrandComponent, CardHeaderComponent, TableDirective, AvatarComponent, FlatpickrModule, NgbModalModule, CalendarModule, CommonModule, FormsModule, JsonPipe, CardComponent]
+    templateUrl: 'dashboard.component.html',
+    styleUrls: ['dashboard.component.scss'],
+    standalone: true,
+    imports: [WidgetsDropdownComponent, TextColorDirective, CardComponent, CardBodyComponent, RowComponent, ColComponent, ButtonDirective, IconDirective, ButtonGroupComponent, FormCheckLabelDirective, ChartjsComponent, CardFooterComponent, GutterDirective, ProgressBarDirective, ProgressComponent, WidgetsBrandComponent, CardHeaderComponent, TableDirective, AvatarComponent, FlatpickrModule, NgbModalModule, CalendarModule, CommonModule, FormsModule, JsonPipe, CardComponent]
 })
 export class DashboardComponent implements OnInit {
 
-  constructor(private modal: NgbModal) {
+    @ViewChild('cardModalContent', { static: true }) cardModalContent: TemplateRef<any> | undefined;
 
-  }
+    CalendarEvents: AppCalendarEvent[] = <any>[];
+    events: CalendarEvent[] = [];
+    json: JsonPipe | undefined
+    calendarDate: CalendarDatePipe | undefined;
+    view: CalendarView = CalendarView.Month;
+    CalendarView = CalendarView;
+    viewDate: Date = new Date();
+    refresh = new Subject<void>();
+    activeDayIsOpen: boolean = true;
+    modalData: {
+        action: string;
+        event: CalendarEvent;
+    } | undefined;
 
-  ngOnInit(): void {
-  }
+    constructor(private modal: NgbModal, public calendarService: CalendarService, public toastService: ToastService) {
 
-  @ViewChild('modalContent', { static: true }) modalContent: TemplateRef<any> | undefined;
+    }
+
+    ngOnInit(): void {
+
+        this.calendarService.get(new Date().getFullYear() + "-" + (new Date().getMonth() + 1)).subscribe({
+            next: (v) => {
+                this.CalendarEvents = v;
+
+                this.events = this.CalendarEvents.map((item) => {
+                    return {
+                        start: startOfDay(item.startDate),
+                        end: startOfDay(item.endDate),
+                        title: item.title,
+                        color: this.getEventColor(item.eventType),
+                        allDay: item.allDay,
+                        eventData: item.eventData,
+                        appEventType: item.eventType,
+                    }
+                });
+
+            },
+            error: (e) => this.toastService.showError(e.message),
+            complete: () => console.info('complete')
+        })
+    }
+
+    dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
+        if (isSameMonth(date, this.viewDate)) {
+            if (
+                (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||
+                events.length === 0
+            ) {
+                this.activeDayIsOpen = false;
+            } else {
+                this.activeDayIsOpen = true;
+            }
+            this.viewDate = date;
+        }
+    }
+
+    handleEvent(action: string, event: CalendarEvent): void {
+        this.modalData = { event, action };
+        switch (event.appEventType) {
+            case AppEventType.CreditCardStatement:
+                this.modal.open(this.cardModalContent, { size: 'lg' });
+                break;
+            case AppEventType.CreditCardStatementLastPayment:
+                this.modal.open(this.cardModalContent, { size: 'lg' });
+                break;
+        }
+    }
+
+    setView(view: CalendarView) {
+        this.view = view;
+    }
+
+    closeOpenMonthViewDay() {
+        this.activeDayIsOpen = false;
+    }
+
+    getEventColor(event: AppEventType): EventColor {
+        switch (event) {
+            case AppEventType.CreditCardStatement:
+                return colors['yellow'];
+            case AppEventType.CreditCardStatementLastPayment:
+                return colors['red'];
+            default:
+                return colors['red'];
+        }
+    }
+
+    getCreditCardType(creditCardNumber: string) {
+        // start without knowing the credit card type
+        var result = "unknown";
+
+        // first check for MasterCard
+        if (/^5[1-5]/.test(creditCardNumber)) {
+            result = "mastercard";
+        }
+        // then check for Visa
+        else if (/^4/.test(creditCardNumber)) {
+            result = "visa";
+        }
+        else if (/^9792|^65|^3657|^2205/.test(creditCardNumber)) {
+            result = "troy";
+        }
+        // then check for AmEx
+        else if (/^3[47]/.test(creditCardNumber)) {
+            result = "amex";
+        }
+        // then check for Discover
+        else if (/6(?:011|5[0-9]{2})[0-9]{12}/.test(creditCardNumber)) {
+            result = "discover";
+        }
 
 
-  json: JsonPipe | undefined
-  calendarDate:CalendarDatePipe | undefined;
-  view: CalendarView = CalendarView.Month;
 
-  CalendarView = CalendarView;
+        return result;
+    }
 
-  viewDate: Date = new Date();
-
-  modalData: {
-      action: string;
-      event: CalendarEvent;
-  } | undefined;
-
-  actions: CalendarEventAction[] = [
-      {
-          label: '<i class="fas fa-fw fa-pencil-alt"></i>',
-          a11yLabel: 'Edit',
-          onClick: ({ event }: { event: CalendarEvent }): void => {
-              this.handleEvent('Edited', event);
-          },
-      },
-      {
-          label: '<i class="fas fa-fw fa-trash-alt"></i>',
-          a11yLabel: 'Delete',
-          onClick: ({ event }: { event: CalendarEvent }): void => {
-              this.events = this.events.filter((iEvent) => iEvent !== event);
-              this.handleEvent('Deleted', event);
-          },
-      },
-  ];
-
-  refresh = new Subject<void>();
-
-  events: CalendarEvent[] = [
-      {
-          start: subDays(startOfDay(new Date()), 1),
-          end: addDays(new Date(), 5),
-          title: 'A 3 day event',
-          color: { ...colors['red'] },
-          actions: this.actions,
-          allDay: true,
-          resizable: {
-              beforeStart: true,
-              afterEnd: true,
-          },
-          draggable: true,
-      },
-      {
-        start: subDays(startOfDay(new Date()), 1),
-        end: addDays(new Date(), 5),
-        title: 'A 3 day event',
-        color: { ...colors['red'] },
-        actions: this.actions,
-        allDay: true,
-        resizable: {
-            beforeStart: true,
-            afterEnd: true,
-        },
-        draggable: true,
-    },
-      {
-          start: startOfDay(new Date()),
-          title: 'An event with no end date',
-          color: { ...colors['yellow'] },
-          actions: this.actions,
-      },
-      {
-          start: subDays(endOfMonth(new Date()), 3),
-          end: addDays(endOfMonth(new Date()), 3),
-          title: 'A long event that spans 2 months',
-          color: { ...colors['blue'] },
-          allDay: true,
-      },
-      {
-          start: addHours(startOfDay(new Date()), 2),
-          end: addHours(new Date(), 2),
-          title: 'A draggable and resizable event',
-          color: { ...colors['yellow'] },
-          actions: this.actions,
-          resizable: {
-              beforeStart: true,
-              afterEnd: true,
-          },
-          draggable: true,
-      },
-  ];
-
-  activeDayIsOpen: boolean = true;
-
-
-  dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
-      if (isSameMonth(date, this.viewDate)) {
-          if (
-              (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||
-              events.length === 0
-          ) {
-              this.activeDayIsOpen = false;
-          } else {
-              this.activeDayIsOpen = true;
-          }
-          this.viewDate = date;
-      }
-  }
-
-  eventTimesChanged({
-      event,
-      newStart,
-      newEnd,
-  }: CalendarEventTimesChangedEvent): void {
-      this.events = this.events.map((iEvent) => {
-          if (iEvent === event) {
-              return {
-                  ...event,
-                  start: newStart,
-                  end: newEnd,
-              };
-          }
-          return iEvent;
-      });
-      this.handleEvent('Dropped or resized', event);
-  }
-
-  handleEvent(action: string, event: CalendarEvent): void {
-      this.modalData = { event, action };
-      this.modal.open(this.modalContent, { size: 'lg' });
-  }
-
-  addEvent(): void {
-      this.events = [
-          ...this.events,
-          {
-              title: 'New event',
-              start: startOfDay(new Date()),
-              end: endOfDay(new Date()),
-              color: colors['red'],
-              draggable: true,
-              resizable: {
-                  beforeStart: true,
-                  afterEnd: true,
-              },
-          },
-      ];
-  }
-
-  deleteEvent(eventToDelete: CalendarEvent) {
-      this.events = this.events.filter((event) => event !== eventToDelete);
-  }
-
-  setView(view: CalendarView) {
-      this.view = view;
-  }
-
-  closeOpenMonthViewDay() {
-      this.activeDayIsOpen = false;
-  }
+    getDate(day: number) {
+        return new Date(new Date().getFullYear(), new Date().getMonth() + 1, day);
+    }
 }

@@ -28,6 +28,7 @@ namespace ParaTakip.Entities
         public class CreditCard: MongoBaseEntity
         {
             public string MaskedCardNumber { get; set; }
+            public string BankName { get; set; }
             public short StatementDay { get; set; }
             public short LastPaymentDay { get; set;}
         }

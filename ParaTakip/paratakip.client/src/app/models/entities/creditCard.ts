@@ -2,6 +2,7 @@ import { BaseEntity } from './baseEntity';
 
 export class CreditCard extends BaseEntity{
     maskedCardNumber : string;
+    bankName:string;
     statementDay : number;
     lastPaymentDay : number;
 
@@ -10,6 +11,7 @@ export class CreditCard extends BaseEntity{
         this.maskedCardNumber = '';
         this.statementDay = 1;
         this.lastPaymentDay = 10;
+        this.bankName = '';
     }
 
     isValid(): boolean {
@@ -22,6 +24,10 @@ export class CreditCard extends BaseEntity{
         }
 
         if(this.lastPaymentDay == null || this.lastPaymentDay < this.statementDay || this.lastPaymentDay > 31){
+            return false;
+        }
+
+        if(this.bankName == null || this.bankName == ''){
             return false;
         }
 

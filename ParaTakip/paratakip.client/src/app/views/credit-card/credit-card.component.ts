@@ -9,7 +9,7 @@ import { AlertComponent } from '@coreui/angular';
 import { CreditCardDirectivesModule } from 'angular-cc-library';
 import { CommonModule } from '@angular/common';
 import { IgxMaskModule, IgxInputGroupModule, IgxIconModule } from 'igniteui-angular';
-import {CreditCard} from 'src/app/models/entities/creditCard';
+import { CreditCard } from 'src/app/models/entities/creditCard';
 import { CreditCardService } from 'src/app/services/credit-card.service';
 
 @Component({
@@ -24,19 +24,57 @@ import { CreditCardService } from 'src/app/services/credit-card.service';
 
 export class CreditCardComponent implements OnInit {
 
-  cardListHeaders:string[] = ['Kart Brand','Maskeli Kart No', 'Ekstre Günü', 'Son Ödeme Günü', ''];
+  cardListHeaders: string[] = ['Kart Brand','Banka', 'Maskeli Kart No', 'Ekstre Günü', 'Son Ödeme Günü', ''];
   cardList: CreditCard[] = [
-    <CreditCard>{maskedCardNumber: '5502 87XX XXXX 3456', statementDay: 1, lastPaymentDay: 1},
-    <CreditCard>{maskedCardNumber: '4010 87XX XXXX 3456', statementDay: 1, lastPaymentDay: 1},
-    <CreditCard>{maskedCardNumber: '3450 87XX XXXX 3456', statementDay: 1, lastPaymentDay: 1},
-    <CreditCard>{maskedCardNumber: '9792 87XX XXXX 3456', statementDay: 1, lastPaymentDay: 1}
+    <CreditCard>{ maskedCardNumber: '5502 87XX XXXX 3456', statementDay: 1, lastPaymentDay: 1 },
+    <CreditCard>{ maskedCardNumber: '4010 87XX XXXX 3456', statementDay: 1, lastPaymentDay: 1 },
+    <CreditCard>{ maskedCardNumber: '3450 87XX XXXX 3456', statementDay: 1, lastPaymentDay: 1 },
+    <CreditCard>{ maskedCardNumber: '9792 87XX XXXX 3456', statementDay: 1, lastPaymentDay: 1 }
   ];
+
+  bankList = [
+    'Akbank',
+    'Aktif Yatırım Bankası',
+    'Albaraka Türk',
+    'Alternatif Bank',
+    'Anadolubank',
+    'Arap Türk Bankası',
+    'Burgan Bank',
+    'Citibank',
+    'DenizBank',
+    'Deutsche Bank',
+    'Fibabanka',
+    'Garanti BBVA',
+    'HSBC',
+    'Halkbank',
+    'ICBC Turkey Bank',
+    'ING',
+    'Kuveyt Türk',
+    'Odeabank',
+    'PASHA Bank',
+    'QNB Finansbank',
+    'TEB',
+    'Türk Eximbank',
+    'Türk Ticaret Bankası',
+    'Türkiye Emlak Katılım Bankası',
+    'Türkiye Finans Katılım Bankası',
+    'Türkiye Kalkınma Bankası',
+    'Türkiye Sınai Kalkınma Bankası',
+    'Türkiye İş Bankası',
+    'Vakıf Katılım Bankası',
+    'VakıfBank',
+    'Yapı Kredi',
+    'Ziraat Bankası',
+    'Ziraat Katılım',
+    'İller Bankası',
+    'İstanbul Takasbank',
+    'Şekerbank',
+  ]
 
   public Intl = Intl;
   public form: CreditCard = new CreditCard();
   public defaultMask: string = '9999 9999 9999 9999'
-  constructor(private creditCardService: CreditCardService, public toastService: ToastService) 
-  { }
+  constructor(private creditCardService: CreditCardService, public toastService: ToastService) { }
 
   ngOnInit() {
     this.creditCardService.get().subscribe({
@@ -76,7 +114,7 @@ export class CreditCardComponent implements OnInit {
   }
 
 
-  saveCreditCard(){
+  saveCreditCard() {
     this.creditCardService.add(this.form).subscribe({
       next: (v) => {
         this.cardList.push(v);
@@ -87,10 +125,10 @@ export class CreditCardComponent implements OnInit {
     })
   }
 
-  delete(card: CreditCard){
+  delete(card: CreditCard) {
     this.creditCardService.delete(card.stringRecordId).subscribe({
       next: (v) => {
-        this.cardList = this.cardList.filter(x=>x.stringRecordId != card.stringRecordId);
+        this.cardList = this.cardList.filter(x => x.stringRecordId != card.stringRecordId);
       },
       error: (e) => this.toastService.showError(e.message),
       complete: () => console.info('complete')

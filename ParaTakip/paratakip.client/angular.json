@@ -16,6 +16,13 @@
           "strict": true
         }
       },
+      "i18n": {
+        "sourceLocale":"en",
+        "locales": {
+          "en": "src/locale/messages.en.xlf",
+          "tr": "src/locale/messages.tr.xlf"
+        }
+      },
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",

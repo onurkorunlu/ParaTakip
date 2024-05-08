@@ -57,6 +57,7 @@ namespace ParaTakip.Controllers
                 var newCreditCard = new AppUser.CreditCard()
                 {
                     MaskedCardNumber = model.MaskedCardNumber.ToMaskedCardNumber(),
+                    BankName = model.BankName,
                     LastPaymentDay = model.LastPaymentDay,
                     StatementDay = model.StatementDay,
                     RecordCreateDate = DateTime.Now,
