@@ -29,7 +29,7 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { FlatpickrModule } from 'angularx-flatpickr';
 import { FormsModule } from '@angular/forms';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
-import { LOCALE_ID } from '@angular/core';
+import { LOCALE_ID  } from '@angular/core';
 import localTr from '@angular/common/locales/tr';
 registerLocaleData(localTr);
 

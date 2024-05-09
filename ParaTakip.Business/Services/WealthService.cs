@@ -8,6 +8,8 @@ using ParaTakip.Model.RequestModel;
 using static ParaTakip.Entities.Wealth;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.JsonPatch.Converters;
+using ParaTakip.Model.ResponseModel;
+using System;
 
 namespace ParaTakip.Business.Services
 {
@@ -91,5 +93,6 @@ namespace ParaTakip.Business.Services
 
             return result;
         }
+       
     }
 }

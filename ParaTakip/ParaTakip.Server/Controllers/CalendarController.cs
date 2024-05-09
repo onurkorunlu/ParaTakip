@@ -16,8 +16,10 @@ namespace ParaTakip.Server.Controllers
         {
             DateTime dateTime = new DateTime(int.Parse(yearAndMonth.Split("-")[0]), int.Parse(yearAndMonth.Split("-")[1]), 1);
 
-            List<GetEventsResponseModel> events = new List<GetEventsResponseModel>();
-            events.AddRange(AppServiceProvider.Instance.Get<IAppUserService>().GetCreditCardEvents(this.AuthenticatedUserId, dateTime));
+            List<GetEventsResponseModel> events =
+            [
+                .. AppServiceProvider.Instance.Get<IAppUserService>().GetCreditCardEvents(this.AuthenticatedUserId, dateTime),
+            ];
 
             return Ok(events);
         }

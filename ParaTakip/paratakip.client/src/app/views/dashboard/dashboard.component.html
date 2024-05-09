@@ -38,7 +38,7 @@
     <br />
     <div [ngSwitch]="view">
       <mwl-calendar-month-view *ngSwitchCase="CalendarView.Month" [viewDate]="viewDate" [events]="events"
-        [refresh]="refresh" [activeDayIsOpen]="activeDayIsOpen" (dayClicked)="dayClicked($event.day)"
+        [refresh]="refresh" [activeDayIsOpen]="activeDayIsOpen" (dayClicked)="dayClicked($event.day)" [weekStartsOn]="1"
         (eventClicked)="handleEvent('Clicked', $event.event)">
       </mwl-calendar-month-view>
       <mwl-calendar-week-view *ngSwitchCase="CalendarView.Week" [viewDate]="viewDate" [events]="events"
@@ -66,6 +66,15 @@
         <p>Kart No : {{modalData?.event?.eventData?.maskedCardNumber}}</p>
         <p>Ekstre Tarihi : {{getDate(modalData?.event?.eventData?.statementDay) | date:'dd MMMM, EEEE'}}</p>
         <p>Son Ödeme Tarihi : {{getDate(modalData?.event?.eventData?.lastPaymentDay) | date:'dd MMMM, EEEE'}}</p>
+        <p>
+          <add-to-calendar-button  
+          [attr.name]="modalData?.event?.eventData?.bankName + ' Kredi Kartı Ekstresi'"
+            options="'Apple','Google','Outlook.com'"
+            [attr.startDate]="modalData?.event?.appCalenderEvent?.startDate | date:'yyyy-MM-dd'"
+            [attr.description]="modalData?.event?.appCalenderEvent?.title"
+            >
+          </add-to-calendar-button>
+        </p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-outline-secondary" (click)="close()">

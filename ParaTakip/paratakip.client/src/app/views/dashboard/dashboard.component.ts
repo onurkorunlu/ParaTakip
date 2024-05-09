@@ -33,7 +33,8 @@ import { EventColor } from 'calendar-utils';
 import { CalendarService } from 'src/app/services/calendar-service';
 import { AppCalendarEvent, AppEventType } from 'src/app/models/entities/calendarEvents';
 import { ToastService } from 'src/app/services/toast.service';
-import { EventType } from '@angular/router';
+import 'add-to-calendar-button';
+import { CUSTOM_ELEMENTS_SCHEMA  } from '@angular/core';
 
 const colors: Record<string, EventColor> = {
     red: {
@@ -54,7 +55,9 @@ const colors: Record<string, EventColor> = {
     templateUrl: 'dashboard.component.html',
     styleUrls: ['dashboard.component.scss'],
     standalone: true,
-    imports: [WidgetsDropdownComponent, TextColorDirective, CardComponent, CardBodyComponent, RowComponent, ColComponent, ButtonDirective, IconDirective, ButtonGroupComponent, FormCheckLabelDirective, ChartjsComponent, CardFooterComponent, GutterDirective, ProgressBarDirective, ProgressComponent, WidgetsBrandComponent, CardHeaderComponent, TableDirective, AvatarComponent, FlatpickrModule, NgbModalModule, CalendarModule, CommonModule, FormsModule, JsonPipe, CardComponent]
+    imports: [WidgetsDropdownComponent, TextColorDirective, CardComponent, CardBodyComponent, RowComponent, ColComponent, ButtonDirective, IconDirective, ButtonGroupComponent, FormCheckLabelDirective, ChartjsComponent, CardFooterComponent, GutterDirective, ProgressBarDirective, ProgressComponent, WidgetsBrandComponent, CardHeaderComponent, TableDirective, AvatarComponent, FlatpickrModule, NgbModalModule, CalendarModule, CommonModule, FormsModule, JsonPipe, CardComponent
+    ],
+    schemas:[CUSTOM_ELEMENTS_SCHEMA]
 })
 export class DashboardComponent implements OnInit {
 
@@ -68,7 +71,7 @@ export class DashboardComponent implements OnInit {
     CalendarView = CalendarView;
     viewDate: Date = new Date();
     refresh = new Subject<void>();
-    activeDayIsOpen: boolean = true;
+    activeDayIsOpen: boolean = false;
     modalData: {
         action: string;
         event: CalendarEvent;
@@ -83,7 +86,6 @@ export class DashboardComponent implements OnInit {
         this.calendarService.get(new Date().getFullYear() + "-" + (new Date().getMonth() + 1)).subscribe({
             next: (v) => {
                 this.CalendarEvents = v;
-
                 this.events = this.CalendarEvents.map((item) => {
                     return {
                         start: startOfDay(item.startDate),
@@ -93,6 +95,7 @@ export class DashboardComponent implements OnInit {
                         allDay: item.allDay,
                         eventData: item.eventData,
                         appEventType: item.eventType,
+                        appCalenderEvent:item
                     }
                 });
 
