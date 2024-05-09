@@ -19,6 +19,7 @@ namespace ParaTakip.Server.Controllers
             List<GetEventsResponseModel> events =
             [
                 .. AppServiceProvider.Instance.Get<IAppUserService>().GetCreditCardEvents(this.AuthenticatedUserId, dateTime),
+                .. AppServiceProvider.Instance.Get<IDebtService>().GetDebtEvents(this.AuthenticatedUserId, dateTime),
             ];
 
             return Ok(events);

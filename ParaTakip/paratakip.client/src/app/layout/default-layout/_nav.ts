@@ -21,6 +21,11 @@ export const navItems: INavData[] = [
     iconComponent: { name: 'cil-credit-card' },
   },
   {
+    name: 'Borçlarım',
+    url: '/debt',
+    iconComponent: { name: 'cil-money' },
+  },
+  {
     title: true,
     name: 'Theme'
   },

@@ -26,5 +26,6 @@ namespace ParaTakip.Model.ResponseModel
     {
         CreditCardStatement,
         CreditCardStatementLastPayment,
+        LoanDebt
     }
 }

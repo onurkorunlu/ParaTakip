@@ -7,7 +7,7 @@ export class BaseEntity{
     recordUpdateUsername:string
 
     constructor(){
-        this.stringRecordId = '';
+        this.stringRecordId = '-1';
         this.recordCreateDate = new Date();
         this.recordUpdateDate = new Date();
         this.recordStatus = true;

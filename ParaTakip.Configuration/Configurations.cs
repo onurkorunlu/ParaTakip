@@ -107,6 +107,7 @@ namespace ParaTakip.Configuration
             AppServiceProvider.Instance.RegisterAsSingleton(typeof(IRegisteredCache), new RegisteredCache());
             AppServiceProvider.Instance.Register(typeof(IWealthService), new WealthService());
  			AppServiceProvider.Instance.Register(typeof(IAppUserRoleService), new AppUserRoleService());
+ 			AppServiceProvider.Instance.Register(typeof(IDebtService), new DebtService());
  			//@RegisterBusinessPointer
         }
 
@@ -118,6 +119,7 @@ namespace ParaTakip.Configuration
  			AppServiceProvider.Instance.Register(typeof(IExchangeRateDataAccess), new ExchangeRateDataAccess());
  			AppServiceProvider.Instance.Register(typeof(IWealthDataAccess), new WealthDataAccess());
  			AppServiceProvider.Instance.Register(typeof(IAppUserRoleDataAccess), new AppUserRoleDataAccess());
+ 			AppServiceProvider.Instance.Register(typeof(IDebtDataAccess), new DebtDataAccess());
  			//@RegisterDataAccessPointer
         }
 

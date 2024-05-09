@@ -1,0 +1,13 @@
+th{
+    font-size: small ;
+    text-align: center;
+}
+
+td{
+    font-size: small ;
+    text-align: center;
+}
+
+.row{
+    padding: 10px !important;
+}

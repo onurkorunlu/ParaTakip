@@ -33,19 +33,24 @@
             Gün
           </div>
         </div>
+        <div class="btn-group" style="margin-left: 5px;">
+          <button cButton [cModalToggle]="staticBackdropModal.id">Takvime Ekle</button>
+        </div>
       </div>
     </div>
     <br />
     <div [ngSwitch]="view">
       <mwl-calendar-month-view *ngSwitchCase="CalendarView.Month" [viewDate]="viewDate" [events]="events"
         [refresh]="refresh" [activeDayIsOpen]="activeDayIsOpen" (dayClicked)="dayClicked($event.day)" [weekStartsOn]="1"
-        (eventClicked)="handleEvent('Clicked', $event.event)">
+        (eventClicked)="handleEvent('Clicked', $event.event)" (eventTimesChanged)="eventTimesChanged($event)">
       </mwl-calendar-month-view>
       <mwl-calendar-week-view *ngSwitchCase="CalendarView.Week" [viewDate]="viewDate" [events]="events"
-        [refresh]="refresh" (eventClicked)="handleEvent('Clicked', $event.event)">
+        [refresh]="refresh" (eventClicked)="handleEvent('Clicked', $event.event)"
+        (eventTimesChanged)="eventTimesChanged($event)">
       </mwl-calendar-week-view>
       <mwl-calendar-day-view *ngSwitchCase="CalendarView.Day" [viewDate]="viewDate" [events]="events"
-        [refresh]="refresh" (eventClicked)="handleEvent('Clicked', $event.event)">
+        [refresh]="refresh" (eventClicked)="handleEvent('Clicked', $event.event)"
+        (eventTimesChanged)="eventTimesChanged($event)">
       </mwl-calendar-day-view>
     </div>
 
@@ -67,12 +72,9 @@
         <p>Ekstre Tarihi : {{getDate(modalData?.event?.eventData?.statementDay) | date:'dd MMMM, EEEE'}}</p>
         <p>Son Ödeme Tarihi : {{getDate(modalData?.event?.eventData?.lastPaymentDay) | date:'dd MMMM, EEEE'}}</p>
         <p>
-          <add-to-calendar-button  
-          [attr.name]="modalData?.event?.eventData?.bankName + ' Kredi Kartı Ekstresi'"
-            options="'Apple','Google','Outlook.com'"
-            [attr.startDate]="modalData?.event?.appCalenderEvent?.startDate | date:'yyyy-MM-dd'"
-            [attr.description]="modalData?.event?.appCalenderEvent?.title"
-            >
+          <add-to-calendar-button [attr.name]="modalData?.event?.eventData?.bankName + ' Kredi Kartı Ekstresi'"
+            options="'Apple','Google','Outlook.com'" [attr.startDate]="modalData?.event?.start| date:'yyyy-MM-dd'"
+            [attr.description]="modalData?.event?.appCalenderEvent?.title" buttonStyle="date">
           </add-to-calendar-button>
         </p>
       </div>
@@ -85,3 +87,36 @@
 
   </c-card-body>
 </c-card>
+
+<c-modal #staticBackdropModal backdrop="static" id="staticBackdropModal">
+  <c-modal-header>
+    <h5 cModalTitle>Takvime Ekle</h5>
+    <button [cModalToggle]="staticBackdropModal.id" cButtonClose></button>
+  </c-modal-header>
+  <c-modal-body>
+    <form cForm>
+      <div class="mb-3">
+        <select cSelect [(ngModel)]="calendarAllModel.eventType" [ngModelOptions]="{standalone: true}">
+          <option value="-1">Etkinlik Tipi</option>
+          <option value="0">Ekstre Kesim Günü</option>
+          <option value="1">Ekstre Son Ödeme Günü</option>
+          <option value="2">Kredi Borcu Ödeme Günü</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <select cSelect [(ngModel)]="calendarAllModel.platform" [ngModelOptions]="{standalone: true}">
+          <option value="-1">Platform</option>
+          <option value="outlook">Outlook</option>
+          <option value="apple">Apple</option>
+          <option value="google">Google</option>
+        </select>
+      </div>
+    </form>
+  </c-modal-body>
+  <c-modal-footer>
+    <button [cModalToggle]="staticBackdropModal.id" cButton color="secondary">
+      Kapat
+    </button>
+    <button cButton color="primary" (click)="addCalenderAll()">Ekle</button>
+  </c-modal-footer>
+</c-modal>

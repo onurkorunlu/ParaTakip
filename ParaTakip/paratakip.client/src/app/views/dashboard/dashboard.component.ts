@@ -1,6 +1,7 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import {
     AvatarComponent,
+    ButtonCloseDirective,
     ButtonDirective,
     ButtonGroupComponent,
     CardBodyComponent,
@@ -8,8 +9,18 @@ import {
     CardFooterComponent,
     CardHeaderComponent,
     ColComponent,
+    DropdownComponent,
+    DropdownItemDirective,
+    DropdownMenuDirective,
+    DropdownToggleDirective,
     FormCheckLabelDirective,
     GutterDirective,
+    ModalBodyComponent,
+    ModalComponent,
+    ModalFooterComponent,
+    ModalHeaderComponent,
+    ModalTitleDirective,
+    ModalToggleDirective,
     ProgressBarDirective,
     ProgressComponent,
     RowComponent,
@@ -21,7 +32,7 @@ import { IconDirective } from '@coreui/icons-angular';
 
 import { WidgetsBrandComponent } from '../widgets/widgets-brand/widgets-brand.component';
 import { WidgetsDropdownComponent } from '../widgets/widgets-dropdown/widgets-dropdown.component';
-import { CommonModule, JsonPipe } from '@angular/common';
+import { CommonModule, DatePipe, JsonPipe } from '@angular/common';
 import { NgbModal, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { CalendarView, CalendarEvent, CalendarEventAction, CalendarEventTimesChangedEvent, CalendarModule } from 'angular-calendar';
 import { CalendarDatePipe } from 'angular-calendar/modules/common/calendar-date/calendar-date.pipe';
@@ -34,7 +45,9 @@ import { CalendarService } from 'src/app/services/calendar-service';
 import { AppCalendarEvent, AppEventType } from 'src/app/models/entities/calendarEvents';
 import { ToastService } from 'src/app/services/toast.service';
 import 'add-to-calendar-button';
-import { CUSTOM_ELEMENTS_SCHEMA  } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { ButtonsComponent } from '../buttons/buttons/buttons.component';
+import { CommonProviders } from 'src/app/helpers/commonProviders';
 
 const colors: Record<string, EventColor> = {
     red: {
@@ -55,9 +68,9 @@ const colors: Record<string, EventColor> = {
     templateUrl: 'dashboard.component.html',
     styleUrls: ['dashboard.component.scss'],
     standalone: true,
-    imports: [WidgetsDropdownComponent, TextColorDirective, CardComponent, CardBodyComponent, RowComponent, ColComponent, ButtonDirective, IconDirective, ButtonGroupComponent, FormCheckLabelDirective, ChartjsComponent, CardFooterComponent, GutterDirective, ProgressBarDirective, ProgressComponent, WidgetsBrandComponent, CardHeaderComponent, TableDirective, AvatarComponent, FlatpickrModule, NgbModalModule, CalendarModule, CommonModule, FormsModule, JsonPipe, CardComponent
+    imports: [CommonProviders.Set(), WidgetsDropdownComponent, TextColorDirective, CardComponent, CardBodyComponent, RowComponent, ColComponent, ButtonDirective, IconDirective, ButtonGroupComponent, FormCheckLabelDirective, ChartjsComponent, CardFooterComponent, GutterDirective, ProgressBarDirective, ProgressComponent, WidgetsBrandComponent, CardHeaderComponent, TableDirective, AvatarComponent, FlatpickrModule, NgbModalModule, CalendarModule, CommonModule, FormsModule, JsonPipe, CardComponent, DropdownComponent, DropdownMenuDirective, DropdownToggleDirective, DropdownItemDirective, ModalComponent, ModalBodyComponent, ModalHeaderComponent, ModalFooterComponent, ModalTitleDirective, ButtonCloseDirective, ModalToggleDirective
     ],
-    schemas:[CUSTOM_ELEMENTS_SCHEMA]
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class DashboardComponent implements OnInit {
 
@@ -77,7 +90,7 @@ export class DashboardComponent implements OnInit {
         event: CalendarEvent;
     } | undefined;
 
-    constructor(private modal: NgbModal, public calendarService: CalendarService, public toastService: ToastService) {
+    constructor(private modal: NgbModal, public calendarService: CalendarService, public toastService: ToastService, public datePipe: DatePipe) {
 
     }
 
@@ -95,7 +108,8 @@ export class DashboardComponent implements OnInit {
                         allDay: item.allDay,
                         eventData: item.eventData,
                         appEventType: item.eventType,
-                        appCalenderEvent:item
+                        appCalenderEvent: item,
+                        draggable: true,
                     }
                 });
 
@@ -117,6 +131,24 @@ export class DashboardComponent implements OnInit {
             }
             this.viewDate = date;
         }
+    }
+
+    eventTimesChanged({
+        event,
+        newStart,
+        newEnd,
+    }: CalendarEventTimesChangedEvent): void {
+        this.events = this.events.map((iEvent) => {
+            if (iEvent === event) {
+                return {
+                    ...event,
+                    start: newStart,
+                    end: newEnd,
+                };
+            }
+            return iEvent;
+        });
+        this.handleEvent('Dropped or resized', event);
     }
 
     handleEvent(action: string, event: CalendarEvent): void {
@@ -144,6 +176,8 @@ export class DashboardComponent implements OnInit {
             case AppEventType.CreditCardStatement:
                 return colors['yellow'];
             case AppEventType.CreditCardStatementLastPayment:
+                return colors['red'];
+            case AppEventType.LoanDebt:
                 return colors['red'];
             default:
                 return colors['red'];
@@ -181,5 +215,56 @@ export class DashboardComponent implements OnInit {
 
     getDate(day: number) {
         return new Date(new Date().getFullYear(), new Date().getMonth() + 1, day);
+    }
+
+    calendarAllModel: any = {
+        platform: '-1',
+        eventType: '-1'
+    };
+
+    addCalenderAll() {
+
+        if (this.calendarAllModel.eventType == '-1') {
+            this.toastService.showError('Lütfen takvim tipini seçiniz.');
+            return;
+        }
+        if (this.calendarAllModel.platform == '-1') {
+            this.toastService.showError('Lütfen takvim platformunu seçiniz.');
+            return;
+        }
+
+
+        switch (this.calendarAllModel.platform) {
+            case 'outlook':
+                this.CalendarEvents.filter(x => 
+                    x.eventType == this.calendarAllModel.eventType
+                    && new Date(x.startDate) >= new Date()
+                ).forEach(element => {
+                    window.open(this.generateCalendarLink(element), '_blank');
+                });
+                break;
+            default:
+                break;
+
+        }
+
+        this.toastService.showInfo('Popup tarayıcı tarafından engellendi ise lütfen izin veriniz.', 'Takvime Ekleme');
+    }
+
+    generateCalendarLink(event: AppCalendarEvent) {
+
+        let subject = '';
+
+        if (event.eventType == AppEventType.CreditCardStatement) {
+            subject = `${event?.eventData?.bankName} - Kredi Kartı Ekstre Kesim Günü`;
+        }
+        else if (event.eventType == AppEventType.CreditCardStatementLastPayment) {
+            subject = `${event?.eventData?.bankName} - Kredi Kartı Ekstre Son Ödeme Günü`;
+        }
+        else if (event.eventType == AppEventType.LoanDebt) {
+            subject = `${event?.title}`;
+        }
+
+        return `https://outlook.live.com/owa/?path=/calendar/action/compose&rru=addevent&startdt=${this.datePipe.transform(event.startDate, 'yyyy-MM-dd')}&enddt=${this.datePipe.transform(event.endDate, 'yyyy-MM-dd')}&subject=${subject}&body=${event.title}&allday=true`;
     }
 }

@@ -1,0 +1,92 @@
+<c-row ngPreserveWhitespaces>
+    <c-col xs="12" md="6">
+        <c-card>
+            <c-card-header>
+                <h4>Borç Girişi</h4>
+            </c-card-header>
+            <c-card-body>
+                <form cForm>
+                    <c-row>
+                        <c-col [md]="6">
+                            <label>Borç Tipi</label>
+                            <select cSelect [(ngModel)]="form.debtType" [ngModelOptions]="{standalone: true}">
+                                <option value="-1">Borç Tipi Seçiniz</option>
+                                <option [value]="0">Kredi</option>
+                            </select>
+                        </c-col>
+                        <c-col [md]="6">
+                            <label>Banka</label>
+                            <select cSelect [(ngModel)]="form.bankName" [ngModelOptions]="{standalone: true}">
+                                <option *ngFor="let bank of bankList" [value]="bank">{{bank}}</option>
+                            </select>
+                        </c-col>
+                    </c-row>
+                    <c-row>
+                        <c-col [md]="6">
+                            <label>Vade Tarihi</label>
+                            <input type="date" cFormControl [(ngModel)]="form.date"
+                                [ngModelOptions]="{standalone: true}" />
+                        </c-col>
+                        <c-col [md]="6">
+                            <label>Borç Tutarı</label>
+                            <input type="number" cFormControl [(ngModel)]="form.totalAmount"
+                                [ngModelOptions]="{standalone: true}" />
+                        </c-col>
+                    </c-row>
+                    <c-row>
+                        <c-col [md]="6">
+                            <label>Taksit Sayısı</label>
+                            <input type="number" cFormControl [(ngModel)]="form.installmentCount"
+                                [ngModelOptions]="{standalone: true}" />
+                        </c-col>
+                        <c-col [md]="6">
+                            <label>Taksit Tutarı</label>
+                            <input type="text" cFormControl disabled="true" [value]="Intl.NumberFormat('tr-TR', {style:'currency', currency:localCurrency}).format(form.totalAmount / form.installmentCount)" />
+                        </c-col>
+                    </c-row>
+                    <c-row>
+                        <c-col>
+                            <button cButton="primary" (click)="saveDebt()" [disabled]="!form.isValid()">Kaydet</button>
+                        </c-col>
+                    </c-row>
+                </form>
+            </c-card-body>
+        </c-card>
+    </c-col>
+
+    <c-col xs="12" md="6">
+        <c-card>
+            <c-card-header>
+                <h4>Borçlarım</h4>
+            </c-card-header>
+            <c-card-body>
+                <table cTable [responsive]="true" [striped]="true">
+                    <thead>
+                        <tr>
+                            <th *ngFor="let header of debtListHeaders">{{ header }}</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody *ngIf="debt?.values">
+                        <tr *ngFor="let debtInfo of debt?.values">
+                            <td>{{getDebtTypeDesc(debtInfo.debtType)}}</td>
+                            <td>{{debtInfo.bankName}}</td>
+                            <td>{{debtInfo.date | date:'dd.MM.yyyy'}}</td>
+                            <td>{{getCurrencyFormat(debtInfo.totalAmount)}}</td>
+                            <td>{{debtInfo.installmentCount}}</td>
+                            <td>{{getCurrencyFormat(debtInfo.totalAmount / debtInfo.installmentCount)}}</td>
+                            <td>
+                                <button cButton color="link" size="sm" style="color: red;" (click)="delete(debtInfo)">
+                                    <svg cIcon class="me-2" name="cil-trash"></svg>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </c-card-body>
+            <c-card-footer>
+                Toplam : {{getCurrencyFormat(getDebtSum())}}
+            </c-card-footer>
+        </c-card>
+    </c-col>
+</c-row>

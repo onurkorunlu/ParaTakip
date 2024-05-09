@@ -29,6 +29,10 @@ export const routes: Routes = [
         loadChildren: () => import('./views/credit-card/routes').then((m) => m.routes)
       },
       {
+        path: 'debt',
+        loadChildren: () => import('./views/debt/routes').then((m) => m.routes)
+      },
+      {
         path: 'theme',
         loadChildren: () => import('./views/theme/routes').then((m) => m.routes)
       },

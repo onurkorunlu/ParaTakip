@@ -4,7 +4,7 @@ export class AppCalendarEvent{
     startDate:Date;
     endDate:Date;
     allDay:boolean;
-    eventData:object | null;
+    eventData:any | null;
 
     constructor(){
         this.eventType = AppEventType.CreditCardStatement;
@@ -19,4 +19,5 @@ export class AppCalendarEvent{
 export enum AppEventType{
     CreditCardStatement,
     CreditCardStatementLastPayment,
+    LoanDebt
 }

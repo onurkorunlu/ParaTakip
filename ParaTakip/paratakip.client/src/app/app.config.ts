@@ -17,7 +17,7 @@ import { DropdownModule, SidebarModule } from '@coreui/angular';
 import { IconSetService } from '@coreui/icons-angular';
 import { routes } from './app.routes';
 import { HTTP_INTERCEPTORS, HttpClientModule, provideHttpClient } from '@angular/common/http';
-import { CommonModule, NgFor, registerLocaleData } from '@angular/common';
+import { CommonModule, DatePipe, NgFor, registerLocaleData } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { CurrencyService } from './services/currency-service';
 import { ToastrModule, ToastrService } from 'ngx-toastr';
@@ -65,7 +65,8 @@ export const appConfig: AppModule = {
       provide: DateAdapter,
       useFactory: adapterFactory,
     })),
-    importProvidersFrom(FlatpickrModule.forRoot())
+    importProvidersFrom(FlatpickrModule.forRoot()),
+    DatePipe,
   ]
 };
 
